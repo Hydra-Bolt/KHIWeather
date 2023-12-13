@@ -1,0 +1,27 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Build and Run",
+        "type": "shell",
+        "command": "gcc",
+        "args": [
+          "main.c",
+          "-o",
+          "main",
+          "-lcurl",
+          "-lcJson"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "presentation": {
+          "reveal": "always",
+          "panel": "new"
+        },
+        "problemMatcher": []
+      }
+    ]
+  }
+  
