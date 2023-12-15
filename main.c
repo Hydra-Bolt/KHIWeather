@@ -37,7 +37,7 @@ char *create_api_url(struct APIParams *params)
 {
     char api_url[] = "https://api.open-meteo.com/v1/forecast";
     char api_params[256];
-    char *apiReq[60];
+    z
 
     // Avoiding buffer overflow if the user is stupid
     snprintf(api_params, sizeof(api_params), "latitude=%.2f&longitude=%.2f&forecast_days=%d&hourly=%s,%s,%s", params->latitude, params->longitude, params->forecastDays, &params->paramArray[0], &params->paramArray[1], params->paramArray[2]);
@@ -206,6 +206,7 @@ void input_api_params(struct APIParams *params)
 
     } while (length < 3); // Use the predefined maximum number of parameters
 }
+
 int main(void)
 {
     CURL *curl;
