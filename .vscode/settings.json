@@ -3,7 +3,9 @@
         "curl.h": "c",
         "stdio.h": "c",
         "cjson.h": "c",
-        "conio.h": "c"
+        "conio.h": "c",
+        "supportlib.h": "c",
+        "pbplots.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled",
     "cmake.sourceDirectory": "C:/MainDrive/Work/Projects/HTTPinC/vcpkg/ports/blas"
