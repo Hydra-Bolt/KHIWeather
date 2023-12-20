@@ -5,6 +5,8 @@
 #include <string.h>
 #include <stdbool.h>
 #include <conio.h>
+// #include "apisetter.h"
+
 
 struct APIParams
 {
@@ -31,63 +33,6 @@ size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp)
     (*json_buffer)[realsize] = 0;
 
     return realsize;
-}
-
-char *create_api_url(struct APIParams *params)
-{
-    char api_url[] = "https://api.open-meteo.com/v1/forecast";
-    char api_params[256];
-    z
-
-    // Avoiding buffer overflow if the user is stupid
-    snprintf(api_params, sizeof(api_params), "latitude=%.2f&longitude=%.2f&forecast_days=%d&hourly=%s,%s,%s", params->latitude, params->longitude, params->forecastDays, &params->paramArray[0], &params->paramArray[1], params->paramArray[2]);
-
-    curl_global_init(CURL_GLOBAL_DEFAULT);
-    char full_url[512];
-    snprintf(full_url, sizeof(full_url), "%s?%s", api_url, api_params);
-    return strdup(full_url);
-}
-
-void process_json(char *json_buffer, FILE *outputFile) //, struct *APIParams)
-{
-    // printf("%s", json_buffer);
-    cJSON *root = cJSON_Parse(json_buffer);
-    if (root != NULL)
-    {
-        cJSON *hourly = cJSON_GetObjectItemCaseSensitive(root, "hourly");
-        if (cJSON_IsObject(hourly))
-        {
-            cJSON *temperatureArray = cJSON_GetObjectItemCaseSensitive(hourly, "temperature_2m"), *timeArray = cJSON_GetObjectItemCaseSensitive(hourly, "time");
-            if (cJSON_IsArray(temperatureArray))
-            {
-                int arraySize = cJSON_GetArraySize(temperatureArray);
-                for (int i = 0; i < arraySize; i++)
-                {
-                    cJSON *temperature = cJSON_GetArrayItem(temperatureArray, i);
-                    cJSON *time = cJSON_GetArrayItem(timeArray, i);
-                    if (cJSON_IsNumber(temperature))
-                    {
-                        fprintf(outputFile, "Temperature at %s: %.2f\n", time->valuestring, temperature->valuedouble);
-                        printf("Temperature at %s: %.2f\n", time->valuestring, temperature->valuedouble);
-                    }
-                }
-            }
-            else
-            {
-                fprintf(stderr, "Temperature array not found in JSON\n");
-            }
-        }
-        else
-        {
-            fprintf(stderr, "Hourly data not found in JSON\n");
-        }
-
-        cJSON_Delete(root);
-    }
-    else
-    {
-        fprintf(stderr, "Failed to parse JSON\n");
-    }
 }
 
 void remove_parameter(char *status, struct APIParams *params, const char *paramName, int *length)
@@ -207,6 +152,78 @@ void input_api_params(struct APIParams *params)
     } while (length < 3); // Use the predefined maximum number of parameters
 }
 
+char *create_api_url(struct APIParams *params)
+{
+    char api_url[] = "https://api.open-meteo.com/v1/forecast";
+    char api_params[256];
+    // Avoiding buffer overflow if the user is stupid
+    snprintf(api_params, sizeof(api_params), "latitude=%.2f&longitude=%.2f&forecast_days=%d&hourly=%s,%s,%s", params->latitude, params->longitude, params->forecastDays, &params->paramArray[0], &params->paramArray[1], params->paramArray[2]);
+
+    curl_global_init(CURL_GLOBAL_DEFAULT);
+    char full_url[512];
+    snprintf(full_url, sizeof(full_url), "%s?%s", api_url, api_params);
+    return strdup(full_url);
+}
+
+void analyze_and_print(int* array)
+{
+    
+}
+
+void process_json(char *json_buffer, FILE *outputFile, struct APIParams *params)
+{
+    // printf("%s", json_buffer);
+    cJSON *root = cJSON_Parse(json_buffer);
+    if (root != NULL)
+    {
+        cJSON *hourly = cJSON_GetObjectItemCaseSensitive(root, "hourly");
+        if (cJSON_IsObject(hourly))
+        {
+            for(int i = 0; i<3; i++)
+            {
+                printf("\nNOW OUTPUTING %s\n", params->paramArray[i]);
+                cJSON *subArray = cJSON_GetObjectItemCaseSensitive(hourly, params->paramArray[i]);
+                if (cJSON_IsArray(subArray))
+                {
+                    int arraySize = cJSON_GetArraySize(subArray);
+                    int outArray[arraySize];
+                    for (int j = 0; j < arraySize; j++)
+                    {
+                        cJSON *param = cJSON_GetArrayItem(subArray, j);
+                        if (cJSON_IsNumber(param))
+                        {
+                            printf("%.2f\n", param->valuedouble);
+                            outArray[j] = param->valuedouble;
+                        } else if (cJSON_IsString(param))
+                        {
+                            printf("%s\n", param->valuestring);
+                        }
+                        else
+                        {
+                            printf("THE FUAKH YOU DOING!\n");
+                        }
+                    }
+                // analyze_and_print(*outArray)
+                }
+                else
+                {
+                    fprintf(stderr, "Temperature array not found in JSON\n");
+                }
+            }
+        }
+        else
+        {
+            fprintf(stderr, "Hourly data not found in JSON\n");
+        }
+
+        cJSON_Delete(root);
+    }
+    else
+    {
+        fprintf(stderr, "Failed to parse JSON\n");
+    }
+}
+
 int main(void)
 {
     CURL *curl;
@@ -238,7 +255,7 @@ int main(void)
 
     input_api_params(params);
     char *full_url = create_api_url(params);
-    // printf("%s", full_url);
+    printf("%s\n", full_url);
 
     curl = curl_easy_init();
     if (curl)
@@ -259,7 +276,7 @@ int main(void)
         }
         else
         {
-            process_json(json_buffer, outputFile);
+            process_json(json_buffer, outputFile, params);
         }
 
         // Cleanup
