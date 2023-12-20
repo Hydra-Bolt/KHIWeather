@@ -172,7 +172,7 @@ void analyze_and_print(int* array)
 
 void process_json(char *json_buffer, FILE *outputFile, struct APIParams *params)
 {
-    // printf("%s", json_buffer);
+    printf("%s", json_buffer);
     cJSON *root = cJSON_Parse(json_buffer);
     if (root != NULL)
     {
