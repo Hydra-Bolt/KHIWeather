@@ -4,8 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include <conio.h>
+#include <termios.h>
+#include <unistd.h>
 
+// Function to enable or disable terminal input buffering
 struct APIParams
 {
     float longitude;
@@ -13,6 +15,20 @@ struct APIParams
     int forecastDays;
     char *paramArray[3][60];
 };
+
+void setBufferedInput(int enable) {
+    static struct termios oldt, newt;
+
+    if (!enable) {
+        tcgetattr(STDIN_FILENO, &oldt);
+        newt = oldt;
+        newt.c_lflag &= ~(ICANON | ECHO);
+        tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+    } else {
+        tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    }
+}
+
 // This just dynamically writes the json and makes memory for it
 size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp)
 {
@@ -37,7 +53,6 @@ char *create_api_url(struct APIParams *params)
 {
     char api_url[] = "https://api.open-meteo.com/v1/forecast";
     char api_params[256];
-    z
 
     // Avoiding buffer overflow if the user is stupid
     snprintf(api_params, sizeof(api_params), "latitude=%.2f&longitude=%.2f&forecast_days=%d&hourly=%s,%s,%s", params->latitude, params->longitude, params->forecastDays, &params->paramArray[0], &params->paramArray[1], params->paramArray[2]);
@@ -50,7 +65,7 @@ char *create_api_url(struct APIParams *params)
 
 void process_json(char *json_buffer, FILE *outputFile) //, struct *APIParams)
 {
-    // printf("%s", json_buffer);
+    printf("%s", json_buffer);
     cJSON *root = cJSON_Parse(json_buffer);
     if (root != NULL)
     {
@@ -116,6 +131,8 @@ void remove_parameter(char *status, struct APIParams *params, const char *paramN
 
 void input_api_params(struct APIParams *params)
 {
+
+    setBufferedInput(0);
     char temp[6] = "off", hum[6] = "off", win[6] = "off", pre[6] = "off", clo[6] = "off";
     int option;
     int length = 0; // Counter for the number of added parameters
@@ -127,7 +144,7 @@ void input_api_params(struct APIParams *params)
         printf("Press the corresponding key again to remove it:\n");
         printf("1. Temperature %s\n2. Humidity %s\n3. Wind Speed %s\n4. Precipitation Chance %s\n5. Cloud Cover %s\n", temp, hum, win, pre, clo);
 
-        option = _getch() - '0';
+        option = getchar() - '0';
 
         switch (option)
         {
@@ -145,7 +162,7 @@ void input_api_params(struct APIParams *params)
             }
             break;
         case 2:
-            // Similar changes for other cases
+
             if (strcmp(hum, "added") != 0)
             {
                 printf("\n\nHumidity has been added\n");
@@ -159,7 +176,6 @@ void input_api_params(struct APIParams *params)
             }
             break;
         case 3:
-            // Similar changes for other cases
             if (strcmp(win, "added") != 0)
             {
                 printf("\n\nWind Speed has been added\n\n");
@@ -173,7 +189,6 @@ void input_api_params(struct APIParams *params)
             }
             break;
         case 4:
-            // Similar changes for other cases
             if (strcmp(pre, "added") != 0)
             {
                 printf("\n\nPrecipitation Probability has been added\n\n");
@@ -187,7 +202,6 @@ void input_api_params(struct APIParams *params)
             }
             break;
         case 5:
-            // Similar changes for other cases
             if (strcmp(clo, "added") != 0)
             {
                 printf("\n\nCloud Cover has been added\n\n");
@@ -205,10 +219,13 @@ void input_api_params(struct APIParams *params)
         }
 
     } while (length < 3); // Use the predefined maximum number of parameters
+    setBufferedInput(1);
+
 }
 
 int main(void)
 {
+    
     CURL *curl;
     CURLcode res;
 
