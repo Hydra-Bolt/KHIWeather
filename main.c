@@ -7,13 +7,13 @@
 #include <termios.h>
 #include <unistd.h>
 
-// Function to enable or disable terminal input buffering
+
 struct APIParams
 {
     float longitude;
     float latitude;
     int forecastDays;
-    char *paramArray[3][60];
+    char paramArray[3][60];
 };
 
 void setBufferedInput(int enable) {
@@ -240,7 +240,7 @@ int main(void)
 
     // Sannan here Implement the input taking from the user:
     // Fill up the input taking part and design the front end
-    printf("Welcome to KHI Weather Reporting System\n Where we bring you the latest weather report\n");
+    printf("Welcome to KHI Weather Reporting System\nWhere we bring you the latest weather report\n");
 
     printf("Enter the longitude info of your location: ");
     scanf("%f", &params->longitude);
@@ -255,7 +255,7 @@ int main(void)
 
     input_api_params(params);
     char *full_url = create_api_url(params);
-    // printf("%s", full_url);
+    printf("%s", full_url);
 
     curl = curl_easy_init();
     if (curl)
