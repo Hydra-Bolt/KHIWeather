@@ -200,7 +200,7 @@ void process_json(char *json_buffer, FILE *outputFile, struct APIParams *params)
                         }
                         else
                         {
-                            printf("THE FUAKH YOU DOING!\n");
+                            // printf("THE FUAKH YOU DOING!\n");
                         }
                     }
                 // analyze_and_print(*outArray)
