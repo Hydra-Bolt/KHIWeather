@@ -10,7 +10,7 @@
           "-o",
           "main",
           "-lcurl",
-          "-lcJson"
+          "-lcjson"
         ],
         "group": {
           "kind": "build",

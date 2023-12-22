@@ -4,9 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include <conio.h>
-// #include "apisetter.h"
-
+#include <termios.h>
+#include <unistd.h>
 
 struct APIParams
 {
@@ -15,6 +14,23 @@ struct APIParams
     int forecastDays;
     char *paramArray[3][60];
 };
+void setBufferedInput(int enable)
+{
+    static struct termios oldt, newt;
+
+    if (!enable)
+    {
+        tcgetattr(STDIN_FILENO, &oldt);
+        newt = oldt;
+        newt.c_lflag &= ~(ICANON | ECHO);
+        tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+    }
+    else
+    {
+        tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    }
+}
+
 // This just dynamically writes the json and makes memory for it
 size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp)
 {
@@ -61,6 +77,7 @@ void remove_parameter(char *status, struct APIParams *params, const char *paramN
 
 void input_api_params(struct APIParams *params)
 {
+    setBufferedInput(0);
     char temp[6] = "off", hum[6] = "off", win[6] = "off", pre[6] = "off", clo[6] = "off";
     int option;
     int length = 0; // Counter for the number of added parameters
@@ -72,7 +89,7 @@ void input_api_params(struct APIParams *params)
         printf("Press the corresponding key again to remove it:\n");
         printf("1. Temperature %s\n2. Humidity %s\n3. Wind Speed %s\n4. Precipitation Chance %s\n5. Cloud Cover %s\n", temp, hum, win, pre, clo);
 
-        option = _getch() - '0';
+        option = getchar() - '0';
 
         switch (option)
         {
@@ -80,7 +97,7 @@ void input_api_params(struct APIParams *params)
             if (strcmp(temp, "added") != 0)
             {
                 printf("\n\nTemperature has been added\n\n");
-                strncpy(params->paramArray[length] , "temperature_2m", 60);
+                strncpy(params->paramArray[length], "temperature_2m", 60);
                 strcpy(temp, "added");
                 length++;
             }
@@ -94,7 +111,7 @@ void input_api_params(struct APIParams *params)
             if (strcmp(hum, "added") != 0)
             {
                 printf("\n\nHumidity has been added\n");
-                strncpy(params->paramArray[length] , "relative_humidity_2m", 60);
+                strncpy(params->paramArray[length], "relative_humidity_2m", 60);
                 strcpy(hum, "added");
                 length++;
             }
@@ -108,7 +125,7 @@ void input_api_params(struct APIParams *params)
             if (strcmp(win, "added") != 0)
             {
                 printf("\n\nWind Speed has been added\n\n");
-                strncpy(params->paramArray[length] , "wind_speed_10m", 60);
+                strncpy(params->paramArray[length], "wind_speed_10m", 60);
                 strcpy(win, "added");
                 length++;
             }
@@ -122,7 +139,7 @@ void input_api_params(struct APIParams *params)
             if (strcmp(pre, "added") != 0)
             {
                 printf("\n\nPrecipitation Probability has been added\n\n");
-                strncpy(params->paramArray[length] , "precipitation_probability", 60);
+                strncpy(params->paramArray[length], "precipitation_probability", 60);
                 strcpy(pre, "added");
                 length++;
             }
@@ -136,7 +153,7 @@ void input_api_params(struct APIParams *params)
             if (strcmp(clo, "added") != 0)
             {
                 printf("\n\nCloud Cover has been added\n\n");
-                strncpy(params->paramArray[length] , "cloud_cover", 60);
+                strncpy(params->paramArray[length], "cloud_cover", 60);
                 strcpy(clo, "added");
                 length++;
             }
@@ -150,6 +167,7 @@ void input_api_params(struct APIParams *params)
         }
 
     } while (length < 3); // Use the predefined maximum number of parameters
+    setBufferedInput(1);
 }
 
 char *create_api_url(struct APIParams *params)
@@ -165,45 +183,119 @@ char *create_api_url(struct APIParams *params)
     return strdup(full_url);
 }
 
-void analyze_and_print(int* array)
+#include <stdio.h>
+
+void analyze_temperature(double *tempArray, int arraySize)
 {
-    
+    printf("Temperature Analysis:\n");
+    for (int i = 0; i < arraySize; i++)
+    {
+        printf("%.2f ", tempArray[i]);
+    }
+    printf("\n");
 }
 
-void process_json(char *json_buffer, FILE *outputFile, struct APIParams *params)
+void analyze_humidity(double *humidArray, int arraySize)
+{
+    printf("Humidity Analysis:\n");
+    for (int i = 0; i < arraySize; i++)
+    {
+        printf("%.2f ", humidArray[i]);
+    }
+    printf("\n");
+}
+
+void analyze_wind(double *windArray, int arraySize)
+{
+    printf("Wind Speed Analysis:\n");
+    for (int i = 0; i < arraySize; i++)
+    {
+        printf("%.2f ", windArray[i]);
+    }
+    printf("\n");
+}
+
+void analyze_rain(double *precepArray, int arraySize)
+{
+    printf("Precipitation Probability Analysis:\n");
+    for (int i = 0; i < arraySize; i++)
+    {
+        printf("%.2f ", precepArray[i]);
+    }
+    printf("\n");
+}
+
+void analyze_clouds(double *cloudArray, int arraySize)
+{
+    printf("Cloud Cover Analysis:\n");
+    for (int i = 0; i < arraySize; i++)
+    {
+        printf("%.2f ", cloudArray[i]);
+    }
+    printf("\n");
+}
+
+
+void process_json(char *json_buffer, FILE *rawData, FILE *procFile, struct APIParams *params)
 {
     printf("%s", json_buffer);
     cJSON *root = cJSON_Parse(json_buffer);
     if (root != NULL)
     {
+        char *formattedJson = cJSON_Print(root);
+
+        // Print or save the formatted JSON
+        fprintf(rawData, "%s\n", formattedJson);
         cJSON *hourly = cJSON_GetObjectItemCaseSensitive(root, "hourly");
         if (cJSON_IsObject(hourly))
         {
-            for(int i = 0; i<3; i++)
+            for (int i = 0; i < 3; i++)
             {
                 printf("\nNOW OUTPUTING %s\n", params->paramArray[i]);
                 cJSON *subArray = cJSON_GetObjectItemCaseSensitive(hourly, params->paramArray[i]);
                 if (cJSON_IsArray(subArray))
                 {
                     int arraySize = cJSON_GetArraySize(subArray);
-                    int outArray[arraySize];
+                    double *outArray[arraySize];
                     for (int j = 0; j < arraySize; j++)
                     {
                         cJSON *param = cJSON_GetArrayItem(subArray, j);
                         if (cJSON_IsNumber(param))
                         {
-                            printf("%.2f\n", param->valuedouble);
+                            fprintf(procFile, "%.2f\n", param->valuedouble);
                             outArray[j] = param->valuedouble;
-                        } else if (cJSON_IsString(param))
-                        {
-                            printf("%s\n", param->valuestring);
                         }
-                        else
+                        else if (cJSON_IsString(param))
                         {
-                            // printf("THE FUAKH YOU DOING!\n");
+                            fprintf(procFile, "%s\n", param->valuestring);
                         }
                     }
-                // analyze_and_print(*outArray)
+                    
+                    if (strcmp(params->paramArray[i], "temperature_2m") == 0)
+                    {
+                        analyze_temprature(outArray, arraySize);
+                    }
+                    else if (strcmp(params->paramArray[i], "relative_humidity_2m") == 0)
+                    {
+                        analyze_humidity(outArray, arraySize);
+                    }
+                    else if (strcmp(params->paramArray[i], "wind_speed_10m") == 0)
+                    {
+                        analyze_wind(outArray, arraySize);
+                    }
+                    else if (strcmp(params->paramArray[i], "precipitation_probability") == 0)
+                    {
+                        analyze_rain(outArray, arraySize);
+                    }
+                    else if (strcmp(params->paramArray[i], "cloud_cover") == 0)
+                    {
+                        analyze_clouds(outArray, arraySize);
+                    }
+                    else
+                    {
+                        fprintf(stderr, "Unknown parameter: %s\n", params->paramArray[i]);
+                    }
+        
                 }
                 else
                 {
@@ -229,8 +321,15 @@ int main(void)
     CURL *curl;
     CURLcode res;
 
-    FILE *outputFile = fopen("output.txt", "w");
-    if (outputFile == NULL)
+    FILE *procData = fopen("processData.txt", "w");
+    if (procData == NULL)
+    {
+        fprintf(stderr, "Error opening file for writing\n");
+        return 1;
+    }
+
+    FILE *rawData = fopen("rawData.json", "a");
+    if (rawData == NULL)
     {
         fprintf(stderr, "Error opening file for writing\n");
         return 1;
@@ -238,6 +337,10 @@ int main(void)
 
     struct APIParams *params = malloc(sizeof(struct APIParams));
 
+    if (params == NULL)
+    {
+        printf("Error when allocating memory!");
+    }
     // Sannan here Implement the input taking from the user:
     // Fill up the input taking part and design the front end
     printf("Welcome to KHI Weather Reporting System\n Where we bring you the latest weather report\n");
@@ -276,7 +379,8 @@ int main(void)
         }
         else
         {
-            process_json(json_buffer, outputFile, params);
+            // fprintf(rawData, "%s", json_buffer);
+            process_json(json_buffer, rawData, procData, params);
         }
 
         // Cleanup
@@ -285,7 +389,8 @@ int main(void)
     }
     free(full_url);
     free(params);
-    fclose(outputFile);
+    fclose(procData);
+    fclose(rawData);
     curl_global_cleanup();
 
     return 0;
