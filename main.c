@@ -12,7 +12,7 @@ struct APIParams
     float longitude;
     float latitude;
     int forecastDays;
-    char *paramArray[3][60];
+    char paramArray[3][60];
 };
 void setBufferedInput(int enable)
 {
@@ -34,7 +34,6 @@ void setBufferedInput(int enable)
 // This just dynamically writes the json and makes memory for it
 size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp)
 {
-    // This function is called by libcurl to write the received data to a buffer
     size_t realsize = size * nmemb;
     char **json_buffer = (char **)userp;
 
@@ -46,22 +45,23 @@ size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp)
     }
 
     memcpy(*json_buffer, contents, realsize);
-    (*json_buffer)[realsize] = 0;
+    (*json_buffer)[realsize] = '\0';  // Null-terminate the string
 
     return realsize;
 }
+
 
 void remove_parameter(char *status, struct APIParams *params, const char *paramName, int *length)
 {
     // Iterate through the parameter array to find and remove the specified parameter
     for (int i = 0; i < *length; i++)
     {
-        if (strcmp(*params->paramArray[i], paramName) == 0)
+        if (strcmp(params->paramArray[i], paramName) == 0)
         {
             // Shift elements to fill the gap
             for (int j = i; j < *length - 1; j++)
             {
-                strcpy(*params->paramArray[j], *params->paramArray[j + 1]);
+                strcpy(params->paramArray[j], params->paramArray[j + 1]);
             }
 
             // Update status and reduce the length
@@ -183,17 +183,39 @@ char *create_api_url(struct APIParams *params)
     return strdup(full_url);
 }
 
-#include <stdio.h>
-
 void analyze_temperature(double *tempArray, int arraySize)
 {
     printf("Temperature Analysis:\n");
-    for (int i = 0; i < arraySize; i++)
-    {
-        printf("%.2f ", tempArray[i]);
+
+    if (arraySize % 24 != 0) {
+        printf("Error: Array size is not a multiple of 24\n");
+        return;
     }
-    printf("\n");
+
+    double maxTemp = tempArray[0], minTemp = tempArray[0];
+    for (int i = 0; i < arraySize / 24; i++)
+    {
+        double sum = 0;
+        for (int j = 0; j < 24; j++)
+        {
+            double tempValue = tempArray[(i * 24) + j];
+            sum += tempValue;
+            if (tempValue> maxTemp)
+            {
+                maxTemp = tempValue;
+            }
+            if (tempValue<maxTemp)
+            {
+                minTemp = tempValue;
+            }
+        }
+        double average = sum / 24;
+        printf("Day %d: The Average Temperature %.2f\n", i + 1, average);
+    }
+    printf("Peak Temprature %.2f, Lowest Temprature %.2f\n", maxTemp, minTemp);
+    
 }
+
 
 void analyze_humidity(double *humidArray, int arraySize)
 {
@@ -256,7 +278,7 @@ void process_json(char *json_buffer, FILE *rawData, FILE *procFile, struct APIPa
                 if (cJSON_IsArray(subArray))
                 {
                     int arraySize = cJSON_GetArraySize(subArray);
-                    double *outArray[arraySize];
+                    double outArray[arraySize];
                     for (int j = 0; j < arraySize; j++)
                     {
                         cJSON *param = cJSON_GetArrayItem(subArray, j);
@@ -273,7 +295,8 @@ void process_json(char *json_buffer, FILE *rawData, FILE *procFile, struct APIPa
                     
                     if (strcmp(params->paramArray[i], "temperature_2m") == 0)
                     {
-                        analyze_temprature(outArray, arraySize);
+                        printf("Temp");
+                        analyze_temperature(outArray, arraySize);
                     }
                     else if (strcmp(params->paramArray[i], "relative_humidity_2m") == 0)
                     {
@@ -341,6 +364,10 @@ int main(void)
     {
         printf("Error when allocating memory!");
     }
+    for (int i = 0; i < 3; i++)
+    {
+        params->paramArray[i][0] = '\0';  // Initialize each string to an empty string
+    }
     // Sannan here Implement the input taking from the user:
     // Fill up the input taking part and design the front end
     printf("Welcome to KHI Weather Reporting System\n Where we bring you the latest weather report\n");
@@ -387,7 +414,7 @@ int main(void)
         curl_free(json_buffer);
         curl_easy_cleanup(curl);
     }
-    free(full_url);
+    // free(full_url);
     free(params);
     fclose(procData);
     fclose(rawData);
