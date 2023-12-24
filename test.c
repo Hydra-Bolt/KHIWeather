@@ -1,5 +1,5 @@
-#include "pbPlots.h"
-#include "supportLib.h"
+#include "plot/pbPlots.h"
+#include "plot/supportLib.h"
 
 void DrawGraph(double* xData, double* yData, size_t numPoints, const char* title, const char* xLabel, const char* yLabel);
 

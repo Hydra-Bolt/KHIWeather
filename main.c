@@ -31,25 +31,33 @@ void setBufferedInput(int enable)
     }
 }
 
-// This just dynamically writes the json and makes memory for it
-size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp)
+// This just dynamically writes the json and makes memory for it; issue maybe hidden
+struct MemoryStruct
+{
+    char *memory;
+    size_t size;
+};
+
+static size_t
+WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
     size_t realsize = size * nmemb;
-    char **json_buffer = (char **)userp;
+    struct MemoryStruct *mem = (struct MemoryStruct *)userp;
 
-    *json_buffer = realloc(*json_buffer, realsize + 1);
-    if (*json_buffer == NULL)
+    mem->memory = (char *)realloc(mem->memory, mem->size + realsize + 1);
+    if (mem->memory == NULL)
     {
-        fprintf(stderr, "Memory allocation failed\n");
+        /* out of memory! */
+        printf("not enough memory (realloc returned NULL)\n");
         return 0;
     }
 
-    memcpy(*json_buffer, contents, realsize);
-    (*json_buffer)[realsize] = '\0';  // Null-terminate the string
+    memcpy(&(mem->memory[mem->size]), contents, realsize);
+    mem->size += realsize;
+    mem->memory[mem->size] = 0;
 
     return realsize;
 }
-
 
 void remove_parameter(char *status, struct APIParams *params, const char *paramName, int *length)
 {
@@ -175,7 +183,7 @@ char *create_api_url(struct APIParams *params)
     char api_url[] = "https://api.open-meteo.com/v1/forecast";
     char api_params[256];
     // Avoiding buffer overflow if the user is stupid
-    snprintf(api_params, sizeof(api_params), "latitude=%.2f&longitude=%.2f&forecast_days=%d&hourly=%s,%s,%s", params->latitude, params->longitude, params->forecastDays, &params->paramArray[0], &params->paramArray[1], params->paramArray[2]);
+    snprintf(api_params, sizeof(api_params), "latitude=%.2f&longitude=%.2f&forecast_days=%d&hourly=%s,%s,%s", params->latitude, params->longitude, params->forecastDays, params->paramArray[0], params->paramArray[1], params->paramArray[2]);
 
     curl_global_init(CURL_GLOBAL_DEFAULT);
     char full_url[512];
@@ -187,7 +195,8 @@ void analyze_temperature(double *tempArray, int arraySize)
 {
     printf("Temperature Analysis:\n");
 
-    if (arraySize % 24 != 0) {
+    if (arraySize % 24 != 0)
+    {
         printf("Error: Array size is not a multiple of 24\n");
         return;
     }
@@ -200,11 +209,11 @@ void analyze_temperature(double *tempArray, int arraySize)
         {
             double tempValue = tempArray[(i * 24) + j];
             sum += tempValue;
-            if (tempValue> maxTemp)
+            if (tempValue > maxTemp)
             {
                 maxTemp = tempValue;
             }
-            if (tempValue<maxTemp)
+            if (tempValue < maxTemp)
             {
                 minTemp = tempValue;
             }
@@ -213,9 +222,7 @@ void analyze_temperature(double *tempArray, int arraySize)
         printf("Day %d: The Average Temperature %.2f\n", i + 1, average);
     }
     printf("Peak Temprature %.2f, Lowest Temprature %.2f\n", maxTemp, minTemp);
-    
 }
-
 
 void analyze_humidity(double *humidArray, int arraySize)
 {
@@ -257,11 +264,10 @@ void analyze_clouds(double *cloudArray, int arraySize)
     printf("\n");
 }
 
-
-void process_json(char *json_buffer, FILE *rawData, FILE *procFile, struct APIParams *params)
+void process_json(char *chunk, FILE *rawData, FILE *procFile, struct APIParams *params)
 {
-    printf("%s", json_buffer);
-    cJSON *root = cJSON_Parse(json_buffer);
+    printf("%s", chunk);
+    cJSON *root = cJSON_Parse(chunk);
     if (root != NULL)
     {
         char *formattedJson = cJSON_Print(root);
@@ -292,10 +298,9 @@ void process_json(char *json_buffer, FILE *rawData, FILE *procFile, struct APIPa
                             fprintf(procFile, "%s\n", param->valuestring);
                         }
                     }
-                    
+
                     if (strcmp(params->paramArray[i], "temperature_2m") == 0)
                     {
-                        printf("Temp");
                         analyze_temperature(outArray, arraySize);
                     }
                     else if (strcmp(params->paramArray[i], "relative_humidity_2m") == 0)
@@ -318,7 +323,6 @@ void process_json(char *json_buffer, FILE *rawData, FILE *procFile, struct APIPa
                     {
                         fprintf(stderr, "Unknown parameter: %s\n", params->paramArray[i]);
                     }
-        
                 }
                 else
                 {
@@ -366,18 +370,56 @@ int main(void)
     }
     for (int i = 0; i < 3; i++)
     {
-        params->paramArray[i][0] = '\0';  // Initialize each string to an empty string
+        params->paramArray[i][0] = '\0'; // Initialize each string to an empty string
     }
     // Sannan here Implement the input taking from the user:
     // Fill up the input taking part and design the front end
-    printf("Welcome to KHI Weather Reporting System\n Where we bring you the latest weather report\n");
+    printf("Welcome to KHI Weather Reporting System\n Where we bring you the latest weather report around the world\n");
+    printf("For now we bring the weather report from the follwoing countries only select your country\n");
+    printf("1. Karachi\n2. London\n3. Moscow\n4. Tel Aviv\n5. Beijing\n6. Dehli\n7. Sydney\n8. Washington D.C\n");
+    setBufferedInput(0);
+    int option;
+    option = getchar() - '0';
+    option--;
 
-    printf("Enter the longitude info of your location: ");
-    scanf("%f", &params->longitude);
-
-    printf("Enter the latitude info of your location: ");
-    scanf("%f", &params->latitude);
-
+    switch (option)
+    {
+    case 0:
+        params->latitude = 24.8607;
+        params->longitude = 67.0011; // Karachi
+        break;
+    case 1:
+        params->latitude = 51.509865;
+        params->longitude = -0.118092; // London
+        break;
+    case 2:
+        params->latitude = 55.7558;
+        params->longitude = 37.6176; // Moscow
+        break;
+    case 3:
+        params->latitude = 32.0853;
+        params->longitude = 34.7818; // Tel Aviv
+        break;
+    case 4:
+        params->latitude = 39.9042;
+        params->longitude = 116.4074; // Beijing
+        break;
+    case 5:
+        params->latitude = 28.6139;
+        params->longitude = 77.2090; // Delhi
+        break;
+    case 6:
+        params->latitude = -33.8688;
+        params->longitude = 151.2093; // Sydney
+        break;
+    case 7:
+        params->latitude = 38.8951;
+        params->longitude = -77.0364; // Washington D.C.
+        break;
+    default:
+        printf("Invalid option. Please enter a number between 0 and 8.\n");
+    };
+    setBufferedInput(1);
     printf("How many days to forcast?: ");
     scanf("%d", &params->forecastDays);
 
@@ -386,18 +428,32 @@ int main(void)
     input_api_params(params);
     char *full_url = create_api_url(params);
     printf("%s\n", full_url);
+    struct MemoryStruct chunk;
+
+    chunk.memory = (char *)malloc(1); /* will be grown as needed by the realloc above */
+    chunk.size = 0;                   /* no data at this point */
+
+    curl_global_init(CURL_GLOBAL_ALL);
+
+    /* init the curl session */
+    // curl_handle = curl_easy_init();
 
     curl = curl_easy_init();
     if (curl)
     {
-        char *json_buffer = NULL;
+        // char *chunk = NULL;
 
         // Set the callback function to handle the received data
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
-        // Pass the buffer to the callback function
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &json_buffer);
-
+        /* specify URL to get */
+        // curl_easy_setopt(curl_handle, CURLOPT_URL, url);
         curl_easy_setopt(curl, CURLOPT_URL, full_url);
+
+        /* send all data to this function  */
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+
+        /* we pass our 'chunk' struct to the callback function */
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&chunk);
+
         res = curl_easy_perform(curl);
 
         if (res != CURLE_OK)
@@ -407,11 +463,11 @@ int main(void)
         else
         {
             // fprintf(rawData, "%s", json_buffer);
-            process_json(json_buffer, rawData, procData, params);
+            process_json(chunk.memory, rawData, procData, params);
         }
 
         // Cleanup
-        curl_free(json_buffer);
+        curl_free(chunk.memory);
         curl_easy_cleanup(curl);
     }
     // free(full_url);
