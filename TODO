@@ -1,7 +1,7 @@
 Temperature Analysis:
     ✔ Daily Averages: Calculate the average temperature for each day. @done(23-12-24 00:13)
     ✔ Temperature Range: Identify the highest and lowest temperatures during the forecast period. @done(23-12-24 00:13)
-    ☐ Trend Analysis: Check for temperature trends over the forecast days.
+    ✘ Trend Analysis: Check for temperature trends over the forecast days. @cancelled(23-12-31 15:31)
 
 Humidity Analysis:
     ☐ Relative Humidity Trends: Look for patterns or trends in relative humidity.

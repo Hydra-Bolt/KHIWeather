@@ -1,57 +1,66 @@
-#include "plot/pbPlots.h"
-#include "plot/supportLib.h"
+#include <plplot/plplot.h>
+#include <stdlib.h>
+#include <time.h>
 
-void DrawGraph(double* xData, double* yData, size_t numPoints, const char* title, const char* xLabel, const char* yLabel);
-
-int main() {
-    double timePoints[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24};
-    double temperatures[] = {20.5, 18.3, 25.0, 12.8, 27.2, 22.6, 16.7, 19.8, 23.4, 14.5, 28.1, 17.2, 21.9, 26.3, 13.4, 24.7, 15.6, 29.5, 11.1, 30.0, 20.0, 18.9, 22.0, 16.3};
-
-
-    DrawGraph(timePoints, temperatures, sizeof(timePoints) / sizeof(timePoints[0]), "Temperature Plot", "Time", "Temperature (Celsius)");
-
-    return 0;
+// Function to generate random float values between min and max
+float getRandomFloat(float min, float max) {
+    return min + ((float)rand() / RAND_MAX) * (max - min);
 }
 
-void DrawGraph(double* xData, double* yData, size_t numPoints, const char* title, const char* xLabel, const char* yLabel) {
-    StartArenaAllocator();
+void plotGraph(PLFLT *x, PLFLT *y1, PLFLT *y2, int n) {
+    // Create a new plot
+    plinit();
 
-    RGBABitmapImageReference *canvasReference = CreateRGBABitmapImageReference();
-    StringReference *errorMessage = CreateStringReference(L"", 0);
+    // Set background color to white
+    plscolbg(255, 255, 255);  // Set background color to white (RGB values: 255, 255, 255)
 
-    ScatterPlotSeries *dataSeries = GetDefaultScatterPlotSeriesSettings();
-    dataSeries->xs = xData;
-    dataSeries->ys = yData;
-    dataSeries->xsLength = numPoints;
-    dataSeries->ysLength = numPoints;
-    dataSeries->color = CreateRGBColor(1, 0, 0);
+    // Set text and line color to black
+    plcol0(0);  // Set the color index 0 to black
 
-    ScatterPlotSettings *settings = GetDefaultScatterPlotSettings();
-    settings->width = 800;
-    settings->height = 600;
-    settings->autoBoundaries = true;
-    settings->autoPadding = true;
-    settings->title = L"title";
-    settings->xLabel = L"xLabel";
-    settings->yLabel = L"yLabel";
-    settings->scatterPlotSeries = &dataSeries;
-    settings->scatterPlotSeriesLength = 1;
+    // Set up viewport and window
+    plenv(0.0, n + 1, 0.0, 100.0, 0, 0);
 
-    _Bool success = DrawScatterPlot(canvasReference, settings->width, settings->height,
-                                    xData, numPoints, yData, numPoints, errorMessage);
+    // Set the axis labels
+    pllab("Time", "Temperature", "Temperature and Precipitation Over Time");
 
-    if (success) {
-        size_t length;
-        ByteArray *pngData = ConvertToPNG(canvasReference->image);
-        WriteToFile(pngData, "graph_plot.png");
-        DeleteImage(canvasReference->image);
-    } else {
-        fprintf(stderr, "Error: ");
-        for (int i = 0; i < errorMessage->stringLength; i++) {
-            fprintf(stderr, "%c", errorMessage->string[i]);
-        }
-        fprintf(stderr, "\n");
+    // Plot temperature data
+    plline(n, x, y1);
+
+    // Set line style for precipitation
+    pllsty(2);
+    // Plot precipitation data
+    plline(n, x, y2);
+
+    plend();
+}
+
+
+int main(int argc, char *argv[]) {
+    // Seed the random number generator with the current time
+    srand((unsigned int)time(NULL));
+
+    // Parse command-line options
+    plparseopts(&argc, argv, PL_PARSE_FULL);
+
+    // Use the provided extended temperature and precipitation data
+    int n = 50;
+    PLFLT time[50];
+    PLFLT temperature[50];
+    PLFLT precipitation[50];
+
+    // Generate time array (1 to n)
+    for (int i = 0; i < n; ++i) {
+        time[i] = i + 1;
+
+        // Generate random temperature values between 20 and 30
+        temperature[i] = getRandomFloat(20.0, 30.0);
+
+        // Generate random precipitation chance values between 0 and 100
+        precipitation[i] = getRandomFloat(0.0, 100.0);
     }
 
-    FreeAllocations();
+    // Use the function to plot the graph
+    plotGraph(time, temperature, precipitation, n);
+
+    return 0;
 }

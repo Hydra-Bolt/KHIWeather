@@ -12,8 +12,19 @@ struct APIParams
     float longitude;
     float latitude;
     int forecastDays;
+    char country[60];
     char paramArray[3][60];
 };
+
+
+// This just dynamically writes the json and makes memory for it; issue maybe hidden
+struct MemoryStruct
+{
+    char *memory;
+    size_t size;
+};
+
+// functions for taking input in special way
 void setBufferedInput(int enable)
 {
     static struct termios oldt, newt;
@@ -31,13 +42,7 @@ void setBufferedInput(int enable)
     }
 }
 
-// This just dynamically writes the json and makes memory for it; issue maybe hidden
-struct MemoryStruct
-{
-    char *memory;
-    size_t size;
-};
-
+// function for dynamic malloc
 static size_t
 WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
@@ -58,7 +63,7 @@ WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp)
 
     return realsize;
 }
-
+// removing a pramater when selected
 void remove_parameter(char *status, struct APIParams *params, const char *paramName, int *length)
 {
     // Iterate through the parameter array to find and remove the specified parameter
@@ -222,26 +227,96 @@ void analyze_temperature(double *tempArray, int arraySize)
         printf("Day %d: The Average Temperature %.2f\n", i + 1, average);
     }
     printf("Peak Temprature %.2f, Lowest Temprature %.2f\n", maxTemp, minTemp);
+    
 }
 
 void analyze_humidity(double *humidArray, int arraySize)
 {
     printf("Humidity Analysis:\n");
+
+    if (arraySize % 24 != 0)
+    {
+        printf("Error: Array size is not a multiple of 24\n");
+        return;
+    }
+
+    double maxHumidity = humidArray[0], minHumidity = humidArray[0];
+    double sum = 0;
+
+    // Additional variables for trends and correlation
+    int increasingTrendCount = 0;
+    int decreasingTrendCount = 0;
+    int comfortableCount = 0;
+    int correlatedCount = 0;
+
     for (int i = 0; i < arraySize; i++)
     {
-        printf("%.2f ", humidArray[i]);
-    }
-    printf("\n");
-}
+        sum += humidArray[i];
 
+        if (humidArray[i] > maxHumidity)
+        {
+            maxHumidity = humidArray[i];
+        }
+
+        if (humidArray[i] < minHumidity)
+        {
+            minHumidity = humidArray[i];
+        }
+
+        // Check for trends
+        if (i > 0)
+        {
+            if (humidArray[i] > humidArray[i - 1])
+            {
+                increasingTrendCount++;
+            }
+            else if (humidArray[i] < humidArray[i - 1])
+            {
+                decreasingTrendCount++;
+            }
+        }
+
+        // Check for comfort levels (assuming a range of 30% to 70% is comfortable)
+        if (humidArray[i] >= 30 && humidArray[i] <= 70)
+        {
+            comfortableCount++;
+        }
+    }
+
+    double averageHumidity = sum / arraySize;
+
+    printf("Average Humidity: %.2f%%\n", averageHumidity);
+    printf("Peak Humidity: %.2f%%, Lowest Humidity: %.2f%%\n", maxHumidity, minHumidity);
+
+    // Print trends
+    printf("Relative Humidity Trends:\n");
+    printf("Increasing Trends: %d\n", increasingTrendCount);
+    printf("Decreasing Trends: %d\n", decreasingTrendCount);
+
+    // Print comfort levels
+    printf("Comfort Levels:\n");
+    printf("Comfortable Hours: %d\n", comfortableCount);
+}
 void analyze_wind(double *windArray, int arraySize)
 {
     printf("Wind Speed Analysis:\n");
+
+    double maxWindSpeed = windArray[0];
+    int maxWindSpeedIndex = 0;
+
     for (int i = 0; i < arraySize; i++)
     {
-        printf("%.2f ", windArray[i]);
+        // Identify the highest wind speeds
+        if (windArray[i] > maxWindSpeed)
+        {
+            maxWindSpeed = windArray[i];
+            maxWindSpeedIndex = i;
+        }
     }
-    printf("\n");
+
+    // Print the results
+    printf("Peak Wind Speeds:\n");
+    printf("Maximum Wind Speed: %.2f m/s at hour %d\n", maxWindSpeed, maxWindSpeedIndex);
 }
 
 void analyze_rain(double *precepArray, int arraySize)
@@ -266,7 +341,7 @@ void analyze_clouds(double *cloudArray, int arraySize)
 
 void process_json(char *chunk, FILE *rawData, FILE *procFile, struct APIParams *params)
 {
-    printf("%s", chunk);
+    // printf("%s", chunk);
     cJSON *root = cJSON_Parse(chunk);
     if (root != NULL)
     {
@@ -381,45 +456,53 @@ int main(void)
     int option;
     option = getchar() - '0';
     option--;
-
+    setBufferedInput(1);
     switch (option)
     {
     case 0:
         params->latitude = 24.8607;
-        params->longitude = 67.0011; // Karachi
+        params->longitude = 67.0011;
+        printf("You selected Karachi.\n");
         break;
     case 1:
         params->latitude = 51.509865;
-        params->longitude = -0.118092; // London
+        params->longitude = -0.118092;  // London
+        printf("You selected London.\n");
         break;
     case 2:
         params->latitude = 55.7558;
-        params->longitude = 37.6176; // Moscow
+        params->longitude = 37.6176;    // Moscow
+        printf("You selected Moscow.\n");
         break;
     case 3:
         params->latitude = 32.0853;
-        params->longitude = 34.7818; // Tel Aviv
+        params->longitude = 34.7818;    // Tel Aviv
+        printf("You selected Tel Aviv.\n");
         break;
     case 4:
         params->latitude = 39.9042;
-        params->longitude = 116.4074; // Beijing
+        params->longitude = 116.4074;   // Beijing
+        printf("You selected Beijing.\n");
         break;
     case 5:
         params->latitude = 28.6139;
-        params->longitude = 77.2090; // Delhi
+        params->longitude = 77.2090;    // Delhi
+        printf("You selected Delhi.\n");
         break;
     case 6:
         params->latitude = -33.8688;
-        params->longitude = 151.2093; // Sydney
+        params->longitude = 151.2093;   // Sydney
+        printf("You selected Sydney.\n");
         break;
     case 7:
         params->latitude = 38.8951;
-        params->longitude = -77.0364; // Washington D.C.
+        params->longitude = -77.0364;   // Washington D.C.
+        printf("You selected Washington D.C..\n");
         break;
     default:
         printf("Invalid option. Please enter a number between 0 and 8.\n");
     };
-    setBufferedInput(1);
+    // setBufferedInput(1);
     printf("How many days to forcast?: ");
     scanf("%d", &params->forecastDays);
 
