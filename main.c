@@ -16,7 +16,7 @@ struct APIParams
     char paramArray[3][60];
 };
 
-
+struct APIParams *params;
 // This just dynamically writes the json and makes memory for it; issue maybe hidden
 struct MemoryStruct
 {
@@ -227,7 +227,6 @@ void analyze_temperature(double *tempArray, int arraySize)
         printf("Day %d: The Average Temperature %.2f\n", i + 1, average);
     }
     printf("Peak Temprature %.2f, Lowest Temprature %.2f\n", maxTemp, minTemp);
-    
 }
 
 void analyze_humidity(double *humidArray, int arraySize)
@@ -316,15 +315,23 @@ void analyze_wind(double *windArray, int arraySize)
 
     // Print the results
     printf("Peak Wind Speeds:\n");
-    printf("Maximum Wind Speed: %.2f m/s at hour %d\n", maxWindSpeed, maxWindSpeedIndex);
+    printf("Maximum Wind Speed: %.2f m/s at on %d hour of the %d day\n", maxWindSpeed, maxWindSpeedIndex % 24, maxWindSpeedIndex / 24 + 1);
 }
 
 void analyze_rain(double *precepArray, int arraySize)
 {
     printf("Precipitation Probability Analysis:\n");
-    for (int i = 0; i < arraySize; i++)
+    for (int i = 0; i < arraySize/ 24; i++)
     {
-        printf("%.2f ", precepArray[i]);
+        double sum = 0;
+        for (int j = 0; j < 24; j++)
+        {
+            // printf("%.2f: %d Day %d Hour Rain Chances\n", precepArray[i], i % 24, i / 24 + 1);
+            double tempValue = precepArray[(i * 24) + j];
+            sum += tempValue;
+        }
+        double average = sum / 24;
+        printf("%.2f: %d Day Rain Chances\n", precepArray[i], i);
     }
     printf("\n");
 }
@@ -332,9 +339,31 @@ void analyze_rain(double *precepArray, int arraySize)
 void analyze_clouds(double *cloudArray, int arraySize)
 {
     printf("Cloud Cover Analysis:\n");
-    for (int i = 0; i < arraySize; i++)
+    for (int i = 0; i < arraySize / 24; i++)
     {
-        printf("%.2f ", cloudArray[i]);
+        double sum = 0;
+        for (int j = 0; j < 24; j++)
+        {
+            double tempValue = cloudArray[(i * 24) + j];
+            sum += tempValue;
+        }
+        double average = sum / 24;
+        if (average < 25)
+        {
+            printf("Scatterd Clouds for the %d Day\n", i+1);
+        }
+        else if (average < 50)
+        {
+            printf("Mostly Clouds for the %d Day\n", i+1);
+        }
+        else if (average < 75)
+        {
+            printf("Broken Clouds for the %d Day\n", i+1);
+        }
+        else if (average <= 100)
+        {
+            printf("Overcast with a chance of rain %d Day\n", i +1);
+        }
     }
     printf("\n");
 }
@@ -466,37 +495,37 @@ int main(void)
         break;
     case 1:
         params->latitude = 51.509865;
-        params->longitude = -0.118092;  // London
+        params->longitude = -0.118092; // London
         printf("You selected London.\n");
         break;
     case 2:
         params->latitude = 55.7558;
-        params->longitude = 37.6176;    // Moscow
+        params->longitude = 37.6176; // Moscow
         printf("You selected Moscow.\n");
         break;
     case 3:
         params->latitude = 32.0853;
-        params->longitude = 34.7818;    // Tel Aviv
+        params->longitude = 34.7818; // Tel Aviv
         printf("You selected Tel Aviv.\n");
         break;
     case 4:
         params->latitude = 39.9042;
-        params->longitude = 116.4074;   // Beijing
+        params->longitude = 116.4074; // Beijing
         printf("You selected Beijing.\n");
         break;
     case 5:
         params->latitude = 28.6139;
-        params->longitude = 77.2090;    // Delhi
+        params->longitude = 77.2090; // Delhi
         printf("You selected Delhi.\n");
         break;
     case 6:
         params->latitude = -33.8688;
-        params->longitude = 151.2093;   // Sydney
+        params->longitude = 151.2093; // Sydney
         printf("You selected Sydney.\n");
         break;
     case 7:
         params->latitude = 38.8951;
-        params->longitude = -77.0364;   // Washington D.C.
+        params->longitude = -77.0364; // Washington D.C.
         printf("You selected Washington D.C..\n");
         break;
     default:
