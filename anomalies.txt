@@ -1,0 +1,4 @@
+Anomaly Detected - Day 1, Hour 24: Humidity Spike at 93.00%
+Anomaly Detected - Day 2, Hour 1: Humidity Spike at 92.00%
+Anomaly Detected - Day 2, Hour 2: Humidity Spike at 92.00%
+Anomaly Detected - Day 2, Hour 3: Humidity Spike at 92.00%

@@ -4,35 +4,35 @@ Temperature Analysis:
     ✘ Trend Analysis: Check for temperature trends over the forecast days. @cancelled(23-12-31 15:31)
 
 Humidity Analysis:
-    ☐ Relative Humidity Trends: Look for patterns or trends in relative humidity.
-    ☐ Comfort Levels: Assess whether humidity levels are within a comfortable range for humans.
-    ☐ Correlation with Other Parameters: Explore if humidity correlates with temperature or precipitation.
+    ✔ Relative Humidity Trends: Look for patterns or trends in relative humidity. @started(24-01-05 17:22) @done(24-01-05 17:22) @lasted(22s)
+    ✔ Comfort Levels: Assess whether humidity levels are within a comfortable range for humans. @done(24-01-05 17:22)
+    ✔ Correlation with Other Parameters: Explore if humidity correlates with temperature or precipitation. @done(24-01-05 17:22)
 
 Wind Speed Analysis:
-    ☐ Peak Wind Speeds: Identify the highest wind speeds during the forecast period.
-    ☐ Wind Direction: Analyze the predominant wind direction.
-    ☐ Wind Speed Distribution: Create a histogram showing the distribution of wind speeds.
+    ✔ Peak Wind Speeds: Identify the highest wind speeds during the forecast period. @done(24-01-05 17:22)
+    ✔ Wind Direction: Analyze the predominant wind direction. @done(24-01-05 17:22)
+    ✔ Wind Speed Distribution: Create a histogram showing the distribution of wind speeds. @done(24-01-05 17:22)
 
 Precipitation Probability Analysis:
-    ☐ Daily Precipitation Probability: Summarize the probability of precipitation for each day.
-    ☐ Rainfall Amount: If available, analyze the expected amount of rainfall.
-    ☐ Correlation with Temperature: Check if precipitation is correlated with temperature changes.
+    ✔ Daily Precipitation Probability: Summarize the probability of precipitation for each day. @done(24-01-05 17:22)
+    ✔ Rainfall Amount: If available, analyze the expected amount of rainfall. @done(24-01-05 17:22)
+    ✔ Correlation with Temperature: Check if precipitation is correlated with temperature changes. @done(24-01-05 17:22)
 
 Cloud Cover Analysis:
-    ☐ Daily Cloud Cover Percentage: Summarize the cloud cover percentage for each day.
-    ☐ Sky Conditions: Categorize sky conditions (clear, partly cloudy, cloudy).
-    ☐ Impact on Temperature: Explore how cloud cover influences temperature variations.
+    ✔ Daily Cloud Cover Percentage: Summarize the cloud cover percentage for each day. @done(24-01-05 17:22)
+    ✔ Sky Conditions: Categorize sky conditions (clear, partly cloudy, cloudy). @done(24-01-05 17:22)
+    ✔ Impact on Temperature: Explore how cloud cover influences temperature variations. @done(24-01-05 17:22)
 
 Overall Forecast Analysis:
-    ☐ Composite Graphs: Create composite graphs showing multiple parameters on the same chart for easier comparison.
-    ☐ Weather Events: Identify any specific weather events (e.g., storms, temperature spikes) during the forecast period.
-    ☐ User-Defined Thresholds: Highlight conditions that exceed user-defined thresholds (e.g., extreme temperatures, high wind speeds).
+    ✘ Composite Graphs: Create composite graphs showing multiple parameters on the same chart for easier comparison. @cancelled(24-01-05 17:23)
+    ✔ Weather Events: Identify any specific weather events (e.g., storms, temperature spikes) during the forecast period. @done(24-01-05 17:23)
+    ✘ User-Defined Thresholds: Highlight conditions that exceed user-defined thresholds (e.g., extreme temperatures, high wind speeds). @cancelled(24-01-05 17:23)
 
 User Interaction:
-    ☐ Allow users to customize analysis parameters: Let users choose specific date ranges or parameters for analysis.
-    ☐ Provide Insights: Summarize key findings or insights from the data.
-    ☐ Visualizations: Use graphs, charts, or maps to visually represent the data for better comprehension.
+    ✔ Allow users to customize analysis parameters: Let users choose specific date ranges or parameters for analysis. @done(24-01-05 17:23)
+    ✔ Provide Insights: Summarize key findings or insights from the data. @done(24-01-05 17:23)
+    ✔ Visualizations: Use graphs, charts, or maps to visually represent the data for better comprehension. @done(24-01-05 17:23)
 
 Machine Learning (Optional):
-    ☐ Implement machine learning algorithms to predict future weather conditions based on historical data.
-    ☐ Explore clustering techniques to identify patterns in the data.
+    ✘ Implement machine learning algorithms to predict future weather conditions based on historical data. @cancelled(24-01-05 17:23)
+    ✘ Explore clustering techniques to identify patterns in the data. @cancelled(24-01-05 17:23)
