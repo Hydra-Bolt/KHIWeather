@@ -1,20 +1,63 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <hpdf.h>
 #include "plotting.h"
 
-FILE *anomaliesFile = NULL;  // Declare the global variable
+FILE *anomaliesFile = NULL; // Declare the global variable
+FILE *reportFile = NULL;
 
-void initializeAnomaliesFile() {
-    anomaliesFile = fopen("anomalies.txt", "a");
-    if (anomaliesFile == NULL) {
+void initializeFiles()
+{
+    anomaliesFile = fopen("anomalies.log", "a");
+    if (anomaliesFile == NULL)
+    {
         perror("Error opening anomalies.txt");
         // Handle the error as needed
     }
+    reportFile = fopen("report.txt", "a");
+    if (reportFile == NULL)
+    {
+        perror("Error opening report file");
+    }
+    HPDF_Doc pdf = HPDF_New(NULL, NULL);
+    if (!pdf)
+    {
+        fprintf(stderr, "Error: Cannot create PDF document\n");
+        // return EXIT_FAILURE;
+    }
 }
-void analyze_temperature(double *tempArray, int arraySize, double *timeArray)
+
+void closeFiles()
 {
-    initializeAnomaliesFile();
-    printf("Temperature Analysis:\n");
+
+    if (anomaliesFile != NULL)
+    {
+        fclose(anomaliesFile);
+    }
+
+    if (reportFile != NULL)
+    {
+        fclose(reportFile);
+    }
+}
+
+void analyze_generic(double *dataArray, int arraySize, double *timeArray, char *parameter, double threshold, HPDF_Doc pdf)
+{
+    initializeFiles();
+    fprintf(reportFile, "%s Analysis:\n", parameter);
+    // Add a new page
+    HPDF_Page page = HPDF_AddPage(pdf);
+    if (!page) {
+        fprintf(stderr, "Error: Cannot add page\n");
+        HPDF_Free(pdf);
+        // return EXIT_FAILURE;
+    }
+
+    // Set font
+    HPDF_Font font = HPDF_GetFont(pdf, "Helvetica", NULL);
+    HPDF_Page_SetFontAndSize(page, font, 12);
+    HPDF_Page_BeginText(page);
+    // HPDF_Page_TextOut(page, 50, 750, "Hello, this is some text for my PDF.");
 
     if (arraySize % 24 != 0)
     {
@@ -22,231 +65,90 @@ void analyze_temperature(double *tempArray, int arraySize, double *timeArray)
         return;
     }
 
-    // Define a threshold for temperature spikes
-    double temperatureThresholdUpper = 40.0; // Adjust this threshold as needed
-    double temperatureThresholdLower = -10.0;
+    double maxVal = dataArray[0];
+    double minVal = dataArray[0];
+    double accum = 0;
+
     for (int i = 0; i < arraySize / 24; i++)
     {
-        double maxTemp = tempArray[i * 24];
-        double minTemp = tempArray[i * 24];
         double sum = 0;
-
-        // Variable to track anomaly
-        // int anomalyIndex = -1;
 
         for (int j = 0; j < 24; j++)
         {
-            double tempValue = tempArray[(i * 24) + j];
-            sum += tempValue;
+            double value = dataArray[(i * 24) + j];
+            sum += value;
 
-            if (tempValue > maxTemp)
+            if (value > maxVal)
             {
-                maxTemp = tempValue;
+                maxVal = value;
             }
 
-            if (tempValue < minTemp)
+            if (value < minVal)
             {
-                minTemp = tempValue;
+                minVal = value;
             }
 
-            // Check for temperature spikes
-            if (tempValue > temperatureThresholdUpper || tempValue < temperatureThresholdLower)
+            // Check for spikes
+            if (value > threshold)
             {
-                printf("Anomaly Detected - Day %d, Hour %d: Temperature Spike at %.2f degrees Celsius\n", i + 1, j + 1, tempValue);
-                fprintf(anomaliesFile, "Anomaly Detected - Day %d, Hour %d: Temperature Spike at %.2f degrees Celsius\n", i + 1, j + 1, tempValue);
-
+                printf("Anomaly Detected - Day %d, Hour %d: %s Spike at %.2f\n", i + 1, j + 1, parameter, value);
+                fprintf(anomaliesFile, "Anomaly Detected - Day %d, Hour %d: %s Spike at %.2f\n", i + 1, j + 1, parameter, value);
             }
         }
 
         double average = sum / 24;
-        printf("Day %d: Average Temperature %.2f, Peak Temperature %.2f, Lowest Temperature %.2f\n", i + 1, average, maxTemp, minTemp);
+        printf("Day %d: Average %s: %.2f, Peak %s: %.2f, Lowest %s: %.2f\n", i + 1, parameter, average, parameter, maxVal, parameter, minVal);
+        accum += average;
+        char reportline[200];
+        snprintf(reportline, sizeof(reportline), "Day %d: Average %s: %.2f, Peak %s: %.2f, Lowest %s: %.2f\n", i + 1, parameter, average, parameter, maxVal, parameter, minVal);
+        // fprintf(reportFile, reportline);
+
+        HPDF_Page_TextOut(page, 50, 750 - 16*i+1 , reportline);
+        
     }
-    plotGraph(timeArray, tempArray, "Time", "Temperature", arraySize);
+
+    double overallAverage = accum / (arraySize / 24);
+    // snprintf(report)
+    char reportline[200];
+    snprintf(reportline, sizeof(reportline), "The Total Forecast Analysis for %s: \n Average %s: %.2f, Peak %s: %.2f, Lowest %s: %.2f\n\n\n", parameter, parameter, overallAverage, parameter, maxVal, parameter, minVal);
+    // fprintf(reportFile, );
+    HPDF_Page_TextOut(page, 50, 750 - 17* (arraySize/24) + 1, reportline);
+    HPDF_Page_EndText(page);
+    plotGraph(timeArray, dataArray, "Time", parameter, arraySize);
+    snprintf(reportline, sizeof(reportline), "./Graphs/%s.jpg", parameter);
+    HPDF_Image image = HPDF_LoadJpegImageFromFile(pdf, reportline);
+    if (image)
+    {
+        HPDF_REAL imageWidth = HPDF_Image_GetWidth(image);
+        HPDF_REAL imageHeight = HPDF_Image_GetHeight(image);
+        HPDF_REAL desiredWidth = 400.0;
+        HPDF_REAL scaleFactor = desiredWidth / imageWidth;
+        HPDF_Page_DrawImage(page, image, 90, 450 - 20* (arraySize/24) + 1, imageWidth * scaleFactor, imageHeight * scaleFactor);
+    }
+    closeFiles();
 }
 
-void analyze_humidity(double *humidArray, int arraySize, double *timeArray)
+void analyze_temperature(double *tempArray, int arraySize, double *timeArray, HPDF_Doc pdf)
 {
-    initializeAnomaliesFile();
-    printf("Humidity Analysis:\n");
-
-    if (arraySize % 24 != 0)
-    {
-        printf("Error: Array size is not a multiple of 24\n");
-        return;
-    }
-
-    // Define a threshold for humidity spikes
-    double humidityThreshold = 90.0; // Adjust this threshold as needed
-
-    for (int i = 0; i < arraySize / 24; i++)
-    {
-        double maxHumidity = humidArray[i * 24];
-        double minHumidity = humidArray[i * 24];
-        double sum = 0;
-
-        // Variable to track anomaly
-        // int anomalyIndex = -1;
-
-        for (int j = 0; j < 24; j++)
-        {
-            double humidityValue = humidArray[(i * 24) + j];
-            sum += humidityValue;
-
-            if (humidityValue > maxHumidity)
-            {
-                maxHumidity = humidityValue;
-            }
-
-            if (humidityValue < minHumidity)
-            {
-                minHumidity = humidityValue;
-            }
-
-            // Check for humidity spikes
-            if (humidityValue > humidityThreshold)
-            {
-                printf("Anomaly Detected - Day %d, Hour %d: Humidity Spike at %.2f%%\n", i + 1, j + 1, humidityValue);
-                fprintf(anomaliesFile,"Anomaly Detected - Day %d, Hour %d: Humidity Spike at %.2f%%\n", i + 1, j + 1, humidityValue);
-                // anomalyIndex = (i * 24) + j;
-            }
-        }
-
-        double averageHumidity = sum / 24;
-        printf("Day %d: Average Humidity: %.2f%%, Peak Humidity: %.2f%%, Lowest Humidity: %.2f%%\n", i + 1, averageHumidity, maxHumidity, minHumidity);
-    }
-    plotGraph(timeArray, humidArray, "Time", "Humidity", arraySize);
+    analyze_generic(tempArray, arraySize, timeArray, "Temperature", 40.0, pdf);
 }
 
-void analyze_wind(double *windArray, int arraySize, double *timeArray)
+void analyze_humidity(double *humidArray, int arraySize, double *timeArray, HPDF_Doc pdf)
 {
-    initializeAnomaliesFile();
-    printf("Wind Speed Analysis:\n");
-
-    // Define a threshold for wind speed spikes
-    double windSpeedThreshold = 40.0; // Adjust this threshold as needed
-
-    for (int i = 0; i < arraySize / 24; i++)
-    {
-        double maxWindSpeed = windArray[i * 24];
-        double sumWindSpeed = 0;
-
-        // Variable to track anomaly
-        // int anomalyIndex = -1;
-
-        for (int j = 0; j < 24; j++)
-        {
-            double windSpeedValue = windArray[(i * 24) + j];
-            sumWindSpeed += windSpeedValue;
-
-            // Identify the highest wind speeds
-            if (windSpeedValue > maxWindSpeed)
-            {
-                maxWindSpeed = windSpeedValue;
-            }
-
-            // Check for wind speed spikes
-            if (windSpeedValue > windSpeedThreshold)
-            {
-                printf("Anomaly Detected - Day %d, Hour %d: Wind Speed Spike at %.2f m/s\n", i + 1, j + 1, windSpeedValue);
-                fprintf(anomaliesFile, "Anomaly Detected - Day %d, Hour %d: Wind Speed Spike at %.2f m/s\n", i + 1, j + 1, windSpeedValue);
-                // anomalyIndex = (i * 24) + j;
-            }
-        }
-
-        // Calculate average wind speed
-        double averageWindSpeed = sumWindSpeed / 24;
-
-        // Print the results
-        printf("Day %d: Average Wind Speed: %.2f m/s, Maximum Wind Speed: %.2f m/s\n", i + 1, averageWindSpeed, maxWindSpeed);
-    }
-    plotGraph(timeArray, windArray, "Time", "Wind Speed", arraySize);
+    analyze_generic(humidArray, arraySize, timeArray, "Humidity", 90.0, pdf);
 }
 
-
-void analyze_rain(double *precepArray, int arraySize, double *timeArray)
+void analyze_wind(double *windArray, int arraySize, double *timeArray, HPDF_Doc pdf)
 {
-    initializeAnomaliesFile();
-    printf("Precipitation Probability Analysis:\n");
-
-    // Define a threshold for precipitation spikes
-    double precipitationThreshold = 80.0; // Adjust this threshold as needed
-
-    for (int i = 0; i < arraySize / 24; i++)
-    {
-        double sum = 0;
-
-        // Variable to track anomaly
-        // int anomalyIndex = -1;
-
-        for (int j = 0; j < 24; j++)
-        {
-            double precipitationValue = precepArray[(i * 24) + j];
-            sum += precipitationValue;
-
-            // Check for precipitation spikes
-            if (precipitationValue > precipitationThreshold)
-            {
-                printf("Anomaly Detected - Day %d, Hour %d: Precipitation Spike at %.2f%%\n", i + 1, j + 1, precipitationValue);
-                fprintf(anomaliesFile, "Anomaly Detected - Day %d, Hour %d: Precipitation Spike at %.2f%%\n", i + 1, j + 1, precipitationValue);
-
-            }
-        }
-
-        double average = sum / 24;
-        printf("Day %d: Average Rain Chances: %.2f%%\n", i + 1, average);
-
-    }
-    plotGraph(timeArray, precepArray, "Time", "Precipitation", arraySize);
+    analyze_generic(windArray, arraySize, timeArray, "Wind Speed", 40.0, pdf);
 }
 
-void analyze_clouds(double *cloudArray, int arraySize, double *timeArray)
+void analyze_rain(double *precepArray, int arraySize, double *timeArray, HPDF_Doc pdf)
 {
-    initializeAnomaliesFile();
-    printf("Cloud Cover Analysis:\n");
+    analyze_generic(precepArray, arraySize, timeArray, "Precipitation", 80.0, pdf);
+}
 
-    // Define a threshold for cloud cover anomalies
-    double cloudCoverThreshold = 90.0; // Adjust this threshold as needed
-
-    for (int i = 0; i < arraySize / 24; i++)
-    {
-        double sum = 0;
-
-        // Variable to track anomaly
-        // int anomalyIndex = -1;
-
-        for (int j = 0; j < 24; j++)
-        {
-            double cloudValue = cloudArray[(i * 24) + j];
-            sum += cloudValue;
-
-            // Check for cloud cover anomalies
-            if (cloudValue > cloudCoverThreshold)
-            {
-                printf("Anomaly Detected - Day %d, Hour %d: High Cloud Cover at %.2f%%\n", i + 1, j + 1, cloudValue);
-                fprintf(anomaliesFile, "Anomaly Detected - Day %d, Hour %d: High Cloud Cover at %.2f%%\n", i + 1, j + 1, cloudValue);
-                // anomalyIndex = (i * 24) + j;
-            }
-        }
-
-        double average = sum / 24;
-
-        // Print the cloud cover category based on average percentage
-        if (average < 25)
-        {
-            printf("Day %d: Scattered Clouds\n", i + 1);
-        }
-        else if (average < 50)
-        {
-            printf("Day %d: Mostly Cloudy\n", i + 1);
-        }
-        else if (average < 75)
-        {
-            printf("Day %d: Broken Clouds\n", i + 1);
-        }
-        else
-        {
-            printf("Day %d: Overcast with a chance of rain\n", i + 1);
-        }
-    }
-    plotGraph(timeArray, cloudArray, "Time", "Cloud Coverage", arraySize);
+void analyze_clouds(double *cloudArray, int arraySize, double *timeArray, HPDF_Doc pdf)
+{
+    analyze_generic(cloudArray, arraySize, timeArray, "Cloud Coverage", 90.0, pdf);
 }
