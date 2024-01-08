@@ -1,0 +1,1 @@
+sudo apt install libcjson-dev libhpdf-dev libcurl4-openssl-dev libncurses5-dev libncursesw5-dev libplplot-dev
