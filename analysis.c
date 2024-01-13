@@ -19,12 +19,6 @@ void initializeFiles()
     {
         perror("Error opening report file");
     }
-    HPDF_Doc pdf = HPDF_New(NULL, NULL);
-    if (!pdf)
-    {
-        fprintf(stderr, "Error: Cannot create PDF document\n");
-        // return EXIT_FAILURE;
-    }
 }
 
 void closeFiles()
@@ -47,14 +41,18 @@ void analyze_generic(double *dataArray, int arraySize, double *timeArray, char *
     fprintf(reportFile, "%s Analysis:\n", parameter);
     // Add a new page
     HPDF_Page page = HPDF_AddPage(pdf);
-    if (!page) {
+    if (!page)
+    {
         fprintf(stderr, "Error: Cannot add page\n");
         HPDF_Free(pdf);
         // return EXIT_FAILURE;
     }
-
-    // Set font
     HPDF_Font font = HPDF_GetFont(pdf, "Helvetica", NULL);
+    HPDF_Page_SetFontAndSize(page, font, 40);
+    HPDF_Page_BeginText(page);
+    HPDF_Page_TextOut(page, 180, 780, parameter);
+    HPDF_Page_EndText(page);
+    font = HPDF_GetFont(pdf, "Helvetica", NULL);
     HPDF_Page_SetFontAndSize(page, font, 12);
     HPDF_Page_BeginText(page);
     // HPDF_Page_TextOut(page, 50, 750, "Hello, this is some text for my PDF.");
@@ -103,16 +101,15 @@ void analyze_generic(double *dataArray, int arraySize, double *timeArray, char *
         snprintf(reportline, sizeof(reportline), "Day %d: Average %s: %.2f, Peak %s: %.2f, Lowest %s: %.2f\n", i + 1, parameter, average, parameter, maxVal, parameter, minVal);
         // fprintf(reportFile, reportline);
 
-        HPDF_Page_TextOut(page, 50, 750 - 16*i+1 , reportline);
-        
+        HPDF_Page_TextOut(page, 50, 750 - 16 * i + 1, reportline);
     }
 
     double overallAverage = accum / (arraySize / 24);
-    // snprintf(report)
     char reportline[200];
-    snprintf(reportline, sizeof(reportline), "The Total Forecast Analysis for %s: \n Average %s: %.2f, Peak %s: %.2f, Lowest %s: %.2f\n\n\n", parameter, parameter, overallAverage, parameter, maxVal, parameter, minVal);
-    // fprintf(reportFile, );
-    HPDF_Page_TextOut(page, 50, 750 - 17* (arraySize/24) + 1, reportline);
+    snprintf(reportline, sizeof(reportline), "The Total Forecast Analysis for %s: \n", parameter);
+    HPDF_Page_TextOut(page, 50, 750 - 17 * (arraySize / 24) + 1, reportline);
+    snprintf(reportline, sizeof(reportline), "Average %s: %.2f, Peak %s: %.2f, Lowest %s: %.2f\n\n\n", parameter, overallAverage, parameter, maxVal, parameter, minVal);
+    HPDF_Page_TextOut(page, 50, 750 - 17 * (arraySize / 24 + 1) + 1, reportline);
     HPDF_Page_EndText(page);
     plotGraph(timeArray, dataArray, "Time", parameter, arraySize);
     snprintf(reportline, sizeof(reportline), "./Graphs/%s.jpg", parameter);
@@ -123,7 +120,7 @@ void analyze_generic(double *dataArray, int arraySize, double *timeArray, char *
         HPDF_REAL imageHeight = HPDF_Image_GetHeight(image);
         HPDF_REAL desiredWidth = 400.0;
         HPDF_REAL scaleFactor = desiredWidth / imageWidth;
-        HPDF_Page_DrawImage(page, image, 90, 450 - 20* (arraySize/24) + 1, imageWidth * scaleFactor, imageHeight * scaleFactor);
+        HPDF_Page_DrawImage(page, image, 90, 450 - 20 * (arraySize / 24) + 1, imageWidth * scaleFactor, imageHeight * scaleFactor);
     }
     closeFiles();
 }

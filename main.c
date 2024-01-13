@@ -71,12 +71,10 @@ void forcast_weather(struct APIParams *params)
         fprintf(stderr, "Error opening file for writing\n");
         return;
     }
-    printf("How many days to forcast?: ");
-    scanf("%d", &params->forecastDays);
-
-    printf("Tell us what to show and what not to show");
-
-    input_api_params(params);
+    // printf("How many days to forcast?: ");
+    // scanf("%d", &params->forecastDays);
+    
+    // printf("Tell us what to show and what not to show");
     char *full_url = create_api_url(params);
     printf("%s\n", full_url);
     struct MemoryStruct chunk;
@@ -266,7 +264,7 @@ void process_json(char *chunk, FILE *rawData, FILE *procFile, struct APIParams *
             fclose(anomaly);
             for (int i = 0; i < 3; i++)
             {
-                printf("\nNOW OUTPUTING %s\n", params->paramArray[i]);
+                // printf("\nNOW OUTPUTING %s\n", params->paramArray[i]);
                 cJSON *subArray = cJSON_GetObjectItemCaseSensitive(hourly, params->paramArray[i]);
                 if (cJSON_IsArray(subArray))
                 {
@@ -336,8 +334,27 @@ void process_json(char *chunk, FILE *rawData, FILE *procFile, struct APIParams *
     // retu12rn EXIT_SUCCESS;
 }
 
-int main(void)
+int main(int argc, char *argv[])
 {
+    if (argc < 6)
+    {
+        printf("City set to Karachi\n");
+        printf("Forecasting temperature, precipitation, and humidity up to 7 days\n");
+        
+        struct APIParams *params = malloc(sizeof(struct APIParams));
+
+        params->longitude = 67.0001;
+        params->latitude = 24.86;
+        params->forecastDays = 7;
+
+        strcpy(params->paramArray[0], "temperature_2m");
+        strcpy(params->paramArray[1], "precipitation_probability");
+        strcpy(params->paramArray[2], "relative_humidity_2m");
+
+        forcast_weather(params);
+        free(params);
+        return 0;
+    }
     struct APIParams *params = malloc(sizeof(struct APIParams));
 
     if (params == NULL)
@@ -348,14 +365,8 @@ int main(void)
     {
         params->paramArray[i][0] = '\0'; // Initialize each string to an empty string
     }
-    // Sannan here Implement the input taking from the user:
-    // Fill up the input taking part and design the front end
-    printf("Welcome to KHI Weather Reporting System\n Where we bring you the latest weather report around the world\n");
-    printf("For now we bring the weather report from the follwoing countries only select your country\n");
-    printf("1. Karachi\n2. London\n3. Moscow\n4. Tel Aviv\n5. Beijing\n6. Dehli\n7. Sydney\n8. Washington D.C\n");
-    setBufferedInput(0);
     int option;
-    option = getchar() - '0';
+    option = atoi(argv[1]);
     option--;
     // setBufferedInput();
     switch (option)
@@ -402,13 +413,10 @@ int main(void)
         break;
     default:
         printf("Invalid option. Please enter a number between 0 and 8.\n");
+        return 0;
     };
     int weather;
-    printf("1. Current Weather\n2. Forcast Weather\n");
-    weather = getchar() - '0';
-    // weather;
-
-    setBufferedInput(1);
+    weather = atoi(argv[2]);
 
     switch (weather)
     {
@@ -417,8 +425,12 @@ int main(void)
         break;
 
     case 2:
+
+        params->forecastDays = atoi(argv[3]);
+        input_api_params(params, argv);
         forcast_weather(params);
     default:
+        printf("Invalid selection of weather cast");
         break;
     }
 
