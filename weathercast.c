@@ -116,7 +116,7 @@ void forecast_weather(struct APIParams *params, char *argv[])
     }
     else
     {
-        printf("Anomalies Detected!\n Sending Report to %s\n", argv[7]);
+        printf("Anomalies Detected!\nSending Report to %s\n", argv[7]);
         char *contents = malloc(size + 1);
 
         if (contents == NULL)
