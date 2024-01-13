@@ -9,8 +9,7 @@ struct APIParams
     char country[60];
     char paramArray[3][60];
 };
-
-void remove_parameter(char *status, struct APIParams *params, const char *paramName, int *length);
+char *create_api_url(struct APIParams *params);
 void input_api_params(struct APIParams *params, char* argv[]);
 
 #endif // APIPARAMS_H

@@ -1,14 +1,14 @@
 Humidity Analysis:
-Day 1: Average Humidity: 64.67, Peak Humidity: 75.00, Lowest Humidity: 56.00
-Day 2: Average Humidity: 80.29, Peak Humidity: 87.00, Lowest Humidity: 56.00
-Day 3: Average Humidity: 89.79, Peak Humidity: 92.00, Lowest Humidity: 56.00
-Day 4: Average Humidity: 86.25, Peak Humidity: 92.00, Lowest Humidity: 56.00
-Day 5: Average Humidity: 80.62, Peak Humidity: 92.00, Lowest Humidity: 56.00
-Day 6: Average Humidity: 89.33, Peak Humidity: 94.00, Lowest Humidity: 56.00
-Day 7: Average Humidity: 83.29, Peak Humidity: 94.00, Lowest Humidity: 56.00
+Day 1: Average Humidity: 68.75, Peak Humidity: 75.00, Lowest Humidity: 64.00
+Day 2: Average Humidity: 81.62, Peak Humidity: 87.00, Lowest Humidity: 64.00
+Day 3: Average Humidity: 89.79, Peak Humidity: 92.00, Lowest Humidity: 64.00
+Day 4: Average Humidity: 86.25, Peak Humidity: 92.00, Lowest Humidity: 64.00
+Day 5: Average Humidity: 80.62, Peak Humidity: 92.00, Lowest Humidity: 64.00
+Day 6: Average Humidity: 89.33, Peak Humidity: 94.00, Lowest Humidity: 64.00
+Day 7: Average Humidity: 83.29, Peak Humidity: 94.00, Lowest Humidity: 64.00
 Wind Speed Analysis:
-Day 1: Average Wind Speed: 4.60, Peak Wind Speed: 6.40, Lowest Wind Speed: 3.60
-Day 2: Average Wind Speed: 6.51, Peak Wind Speed: 7.70, Lowest Wind Speed: 3.60
+Day 1: Average Wind Speed: 4.60, Peak Wind Speed: 7.00, Lowest Wind Speed: 3.60
+Day 2: Average Wind Speed: 6.70, Peak Wind Speed: 8.00, Lowest Wind Speed: 3.60
 Day 3: Average Wind Speed: 8.90, Peak Wind Speed: 10.80, Lowest Wind Speed: 3.60
 Day 4: Average Wind Speed: 11.64, Peak Wind Speed: 17.70, Lowest Wind Speed: 3.60
 Day 5: Average Wind Speed: 6.59, Peak Wind Speed: 17.70, Lowest Wind Speed: 3.60
