@@ -26,8 +26,8 @@ void plotGraph(double *x, double *y, char *x_label, char *y_label, int n) {
     // Create a new plot
     char out[50];
     snprintf(out, sizeof(out), "./Graphs/%s.jpg", y_label);
-    plsdev("jpg");
-    c_plsetopt("DEV", "jpg"); // Set the device to JPEG
+    plsdev("jpgqt");
+    c_plsetopt("DEV", "jpgqt"); // Set the device to JPEG
     c_plsetopt("o", out); // Set the output file name
 
     plinit();

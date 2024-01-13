@@ -3,27 +3,36 @@
 #include <hpdf.h>
 #include "plotting.h"
 
-FILE *anomaliesFile = NULL; // Declare the global variable
+FILE *anomaliesFile = NULL;
 FILE *reportFile = NULL;
+FILE *tempAnomaly = NULL;
 
 void initializeFiles()
 {
     anomaliesFile = fopen("anomalies.log", "a");
     if (anomaliesFile == NULL)
     {
-        perror("Error opening anomalies.txt");
-        // Handle the error as needed
+        perror("Error opening anomalies.log");
+        exit(EXIT_FAILURE);
     }
+
+    tempAnomaly = fopen("emailanomalies.txt", "a");
+    if (tempAnomaly == NULL)
+    {
+        perror("Error opening the temporary anomaly file.");
+        exit(EXIT_FAILURE);
+    }
+
     reportFile = fopen("report.txt", "a");
     if (reportFile == NULL)
     {
-        perror("Error opening report file");
+        perror("Error opening report.txt");
+        exit(EXIT_FAILURE);
     }
 }
 
 void closeFiles()
 {
-
     if (anomaliesFile != NULL)
     {
         fclose(anomaliesFile);
@@ -33,29 +42,52 @@ void closeFiles()
     {
         fclose(reportFile);
     }
+
+    if (tempAnomaly != NULL)
+    {
+        fclose(tempAnomaly);
+    }
+}
+
+void printAnomaly(const char *parameter, int day, int hour, double value)
+{
+    // printf("Anomaly Detected - Day %d, Hour %d: %s Spike at %.2f\n", day, hour, parameter, value);
+    fprintf(anomaliesFile, "Anomaly Detected - Day %d, Hour %d: %s Spike at %.2f\n", day, hour, parameter, value);
+    fprintf(tempAnomaly, "Anomaly Detected - Day %d, Hour %d: %s Spike at %.2f\n", day, hour, parameter, value);
+}
+
+void printReportLine(const char *parameter, int day, double average, double maxVal, double minVal)
+{
+    printf("Day %d: Average %s: %.2f, Peak %s: %.2f, Lowest %s: %.2f\n", day, parameter, average, parameter, maxVal, parameter, minVal);
+    char reportline[200];
+    snprintf(reportline, sizeof(reportline), "Day %d: Average %s: %.2f, Peak %s: %.2f, Lowest %s: %.2f\n", day, parameter, average, parameter, maxVal, parameter, minVal);
+    fprintf(reportFile, "%s", reportline);
 }
 
 void analyze_generic(double *dataArray, int arraySize, double *timeArray, char *parameter, double threshold, HPDF_Doc pdf)
 {
     initializeFiles();
     fprintf(reportFile, "%s Analysis:\n", parameter);
-    // Add a new page
+    fprintf(tempAnomaly, "%s Anomlies:\n", parameter);
+    fprintf(anomaliesFile, "%s Anomlies:\n", parameter);
+
     HPDF_Page page = HPDF_AddPage(pdf);
     if (!page)
     {
         fprintf(stderr, "Error: Cannot add page\n");
         HPDF_Free(pdf);
-        // return EXIT_FAILURE;
+        return;
     }
+
     HPDF_Font font = HPDF_GetFont(pdf, "Helvetica", NULL);
     HPDF_Page_SetFontAndSize(page, font, 40);
     HPDF_Page_BeginText(page);
     HPDF_Page_TextOut(page, 180, 780, parameter);
     HPDF_Page_EndText(page);
+
     font = HPDF_GetFont(pdf, "Helvetica", NULL);
     HPDF_Page_SetFontAndSize(page, font, 12);
     HPDF_Page_BeginText(page);
-    // HPDF_Page_TextOut(page, 50, 750, "Hello, this is some text for my PDF.");
 
     if (arraySize % 24 != 0)
     {
@@ -86,21 +118,18 @@ void analyze_generic(double *dataArray, int arraySize, double *timeArray, char *
                 minVal = value;
             }
 
-            // Check for spikes
             if (value > threshold)
             {
-                printf("Anomaly Detected - Day %d, Hour %d: %s Spike at %.2f\n", i + 1, j + 1, parameter, value);
-                fprintf(anomaliesFile, "Anomaly Detected - Day %d, Hour %d: %s Spike at %.2f\n", i + 1, j + 1, parameter, value);
+                printAnomaly(parameter, i + 1, j + 1, value);
             }
         }
 
         double average = sum / 24;
-        printf("Day %d: Average %s: %.2f, Peak %s: %.2f, Lowest %s: %.2f\n", i + 1, parameter, average, parameter, maxVal, parameter, minVal);
+        printReportLine(parameter, i + 1, average, maxVal, minVal);
         accum += average;
+
         char reportline[200];
         snprintf(reportline, sizeof(reportline), "Day %d: Average %s: %.2f, Peak %s: %.2f, Lowest %s: %.2f\n", i + 1, parameter, average, parameter, maxVal, parameter, minVal);
-        // fprintf(reportFile, reportline);
-
         HPDF_Page_TextOut(page, 50, 750 - 16 * i + 1, reportline);
     }
 
@@ -110,8 +139,11 @@ void analyze_generic(double *dataArray, int arraySize, double *timeArray, char *
     HPDF_Page_TextOut(page, 50, 750 - 17 * (arraySize / 24) + 1, reportline);
     snprintf(reportline, sizeof(reportline), "Average %s: %.2f, Peak %s: %.2f, Lowest %s: %.2f\n\n\n", parameter, overallAverage, parameter, maxVal, parameter, minVal);
     HPDF_Page_TextOut(page, 50, 750 - 17 * (arraySize / 24 + 1) + 1, reportline);
+
     HPDF_Page_EndText(page);
+
     plotGraph(timeArray, dataArray, "Time", parameter, arraySize);
+
     snprintf(reportline, sizeof(reportline), "./Graphs/%s.jpg", parameter);
     HPDF_Image image = HPDF_LoadJpegImageFromFile(pdf, reportline);
     if (image)
@@ -122,6 +154,7 @@ void analyze_generic(double *dataArray, int arraySize, double *timeArray, char *
         HPDF_REAL scaleFactor = desiredWidth / imageWidth;
         HPDF_Page_DrawImage(page, image, 90, 450 - 20 * (arraySize / 24) + 1, imageWidth * scaleFactor, imageHeight * scaleFactor);
     }
+
     closeFiles();
 }
 

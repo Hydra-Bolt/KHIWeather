@@ -8,6 +8,7 @@
 #include <hpdf.h>
 #include "apiparams.h"
 #include "analysis.h"
+#include "emailanomalies.h"
 
 struct MemoryStruct
 {
@@ -51,7 +52,7 @@ char *create_api_url(struct APIParams *params)
     return strdup(full_url);
 }
 
-void forcast_weather(struct APIParams *params)
+void forcast_weather(struct APIParams *params, char *argv[])
 {
     CURL *curl;
     CURLcode res;
@@ -73,7 +74,7 @@ void forcast_weather(struct APIParams *params)
     }
     // printf("How many days to forcast?: ");
     // scanf("%d", &params->forecastDays);
-    
+
     // printf("Tell us what to show and what not to show");
     char *full_url = create_api_url(params);
     printf("%s\n", full_url);
@@ -113,6 +114,43 @@ void forcast_weather(struct APIParams *params)
     fclose(procData);
     fclose(rawData);
     curl_global_cleanup();
+
+    FILE *file = fopen("emailanomalies.txt", "r");
+
+    if (file == NULL)
+    {
+        perror("Error opening file");
+        exit(EXIT_FAILURE);
+    }
+
+    fseek(file, 0, SEEK_END);
+    long size = ftell(file);
+    rewind(file);
+
+    if (size == 0)
+    {
+        printf("No anomalies Detected!\n");
+    }
+    else
+    {
+        printf("Anomalies Detected!\n Sending Report to %s\n", argv[7]);
+        char *contents = malloc(size + 1);
+
+        if (contents == NULL)
+        {
+            perror("Error allocating memory");
+            exit(EXIT_FAILURE);
+        }
+
+        fread(contents, 1, size, file);
+        contents[size] = '\0';
+
+        sendEmailNotification("Anomaly Report", contents, argv[7], "./output.pdf");
+
+        free(contents);
+    }
+
+    fclose(file);
 }
 
 void get_current_weather(float latitude, float longitude)
@@ -260,8 +298,10 @@ void process_json(char *chunk, FILE *rawData, FILE *procFile, struct APIParams *
             cJSON *final = cJSON_GetArrayItem(subTimeArray, arraySize - 1);
             cJSON *first = cJSON_GetArrayItem(subTimeArray, 0);
             FILE *anomaly = fopen("anomalies.log", "a");
-            fprintf(anomaly, "Anomlies detected from %s to %s:\n\n", first->valuestring, final->valuestring);
+            FILE *temp = fopen("emailanomalies.txt", "w");
+            fprintf(anomaly, "\nAnomlies detected from %s to %s:\n\n", first->valuestring, final->valuestring);
             fclose(anomaly);
+            fclose(temp);
             for (int i = 0; i < 3; i++)
             {
                 // printf("\nNOW OUTPUTING %s\n", params->paramArray[i]);
@@ -336,11 +376,11 @@ void process_json(char *chunk, FILE *rawData, FILE *procFile, struct APIParams *
 
 int main(int argc, char *argv[])
 {
-    if (argc < 6)
+    if (argc < 7)
     {
         printf("City set to Karachi\n");
         printf("Forecasting temperature, precipitation, and humidity up to 7 days\n");
-        
+
         struct APIParams *params = malloc(sizeof(struct APIParams));
 
         params->longitude = 67.0001;
@@ -351,7 +391,7 @@ int main(int argc, char *argv[])
         strcpy(params->paramArray[1], "precipitation_probability");
         strcpy(params->paramArray[2], "relative_humidity_2m");
 
-        forcast_weather(params);
+        forcast_weather(params, argv);
         free(params);
         return 0;
     }
@@ -428,7 +468,8 @@ int main(int argc, char *argv[])
 
         params->forecastDays = atoi(argv[3]);
         input_api_params(params, argv);
-        forcast_weather(params);
+        forcast_weather(params, argv);
+        break;
     default:
         printf("Invalid selection of weather cast");
         break;
