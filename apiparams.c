@@ -34,14 +34,14 @@ void input_api_params(struct APIParams *params, char *argv[])
         switch (option)
         {
         case 1:
-            printf("Temperature will be analyzed\n\n");
+            printf("Temperature will be analyzed\n");
             strncpy(params->paramArray[length], "temperature_2m", 60);
             length++;
             break;
         case 2:
             // Similar changes for other cases
 
-            printf("Humidity will be analyzed\n\n");
+            printf("Humidity will be analyzed\n");
             strncpy(params->paramArray[length], "relative_humidity_2m", 60);
             length++;
 
@@ -49,7 +49,7 @@ void input_api_params(struct APIParams *params, char *argv[])
         case 3:
             // Similar changes for other cases
 
-            printf("Wind Speed will be analyzed\n\n");
+            printf("Wind Speed will be analyzed\n");
             strncpy(params->paramArray[length], "wind_speed_10m", 60);
             length++;
 
@@ -57,7 +57,7 @@ void input_api_params(struct APIParams *params, char *argv[])
         case 4:
             // Similar changes for other cases
 
-            printf("Precipitation Probability will be analyzed\n\n");
+            printf("Precipitation Probability will be analyzed\n");
             strncpy(params->paramArray[length], "precipitation_probability", 60);
             length++;
 
@@ -65,13 +65,14 @@ void input_api_params(struct APIParams *params, char *argv[])
         case 5:
             // Similar changes for other cases
 
-            printf("Cloud Cover will be analyzed\n\n");
+            printf("Cloud Cover will be analyzed\n");
             strncpy(params->paramArray[length], "cloud_cover", 60);
             length++;
 
             break;
         default:
-            printf("Invalid, Try again.\n");
+            printf("%d invalid option for paramter, review documentation and retry.", option);
+            break;
         }
 
     } while (length < 3); // Use the predefined maximum number of parameters

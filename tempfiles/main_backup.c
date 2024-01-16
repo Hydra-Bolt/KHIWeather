@@ -506,8 +506,8 @@ int main(void)
         break;
     case 3:
         params->latitude = 32.0853;
-        params->longitude = 34.7818; // Tel Aviv
-        printf("You selected Tel Aviv.\n");
+        params->longitude = 34.7818; // Ankara
+        printf("You selected Ankara.\n");
         break;
     case 4:
         params->latitude = 39.9042;

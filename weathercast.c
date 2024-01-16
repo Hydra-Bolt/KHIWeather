@@ -60,7 +60,6 @@ void forecast_weather(struct APIParams *params, char *argv[])
 
     // printf("Tell us what to show and what not to show");
     char *full_url = create_api_url(params);
-    printf("%s\n", full_url);
     struct MemoryStruct chunk;
 
     chunk.memory = (char *)malloc(1); /* will be grown as needed by the realloc above */

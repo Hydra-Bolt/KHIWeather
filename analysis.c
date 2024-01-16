@@ -67,6 +67,8 @@ void printReportLine(const char *parameter, int day, double average, double maxV
 void analyze_generic(double *dataArray, int arraySize, double *timeArray, char *parameter, double threshold, HPDF_Doc pdf)
 {
     initializeFiles();
+    printf("-----------------------------------------------\n");
+    printf("%s Analysis:\n\n", parameter);
     fprintf(reportFile, "%s Analysis:\n", parameter);
     fprintf(tempAnomaly, "%s Anomlies:\n", parameter);
     fprintf(anomaliesFile, "%s Anomlies:\n", parameter);
