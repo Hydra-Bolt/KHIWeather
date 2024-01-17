@@ -33,10 +33,10 @@ void plotGraph(double *x, double *y, char *x_label, char *y_label, int n) {
     plinit();
 
     // Set background color to white
-    c_plscolbg(255, 255, 255);  // Set background color to white (RGB values: 255, 255, 255)
+    c_plscolbg(255, 255, 255); 
 
     // Set text and line color to black
-    plcol0(0);  // Set the color index 0 to black
+    plcol0(0); 
 
     // Set up viewport and window
     plenv(0.0, n + 1, min_y-3, max_y+3, 0, 0);

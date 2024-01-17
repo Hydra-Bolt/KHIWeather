@@ -1,143 +1,93 @@
 Temperature Anomlies:
-Humidity Anomlies:
-Anomaly Detected - Day 1, Hour 1: Humidity Spike at 91.00
-Anomaly Detected - Day 1, Hour 2: Humidity Spike at 93.00
-Anomaly Detected - Day 1, Hour 3: Humidity Spike at 93.00
-Anomaly Detected - Day 1, Hour 4: Humidity Spike at 94.00
-Anomaly Detected - Day 1, Hour 5: Humidity Spike at 94.00
-Anomaly Detected - Day 1, Hour 6: Humidity Spike at 94.00
-Anomaly Detected - Day 1, Hour 7: Humidity Spike at 94.00
-Anomaly Detected - Day 1, Hour 8: Humidity Spike at 95.00
-Anomaly Detected - Day 1, Hour 9: Humidity Spike at 95.00
-Anomaly Detected - Day 1, Hour 10: Humidity Spike at 94.00
-Anomaly Detected - Day 1, Hour 11: Humidity Spike at 94.00
-Anomaly Detected - Day 1, Hour 12: Humidity Spike at 96.00
-Anomaly Detected - Day 1, Hour 13: Humidity Spike at 97.00
-Anomaly Detected - Day 1, Hour 14: Humidity Spike at 98.00
-Anomaly Detected - Day 1, Hour 15: Humidity Spike at 98.00
-Anomaly Detected - Day 1, Hour 16: Humidity Spike at 99.00
-Anomaly Detected - Day 1, Hour 17: Humidity Spike at 99.00
-Anomaly Detected - Day 1, Hour 18: Humidity Spike at 94.00
-Anomaly Detected - Day 3, Hour 6: Humidity Spike at 91.00
-Anomaly Detected - Day 3, Hour 7: Humidity Spike at 91.00
-Anomaly Detected - Day 3, Hour 8: Humidity Spike at 91.00
-Anomaly Detected - Day 3, Hour 9: Humidity Spike at 92.00
-Anomaly Detected - Day 3, Hour 23: Humidity Spike at 94.00
-Anomaly Detected - Day 3, Hour 24: Humidity Spike at 96.00
-Anomaly Detected - Day 4, Hour 1: Humidity Spike at 96.00
-Anomaly Detected - Day 4, Hour 2: Humidity Spike at 97.00
-Anomaly Detected - Day 4, Hour 3: Humidity Spike at 98.00
-Anomaly Detected - Day 4, Hour 4: Humidity Spike at 98.00
-Anomaly Detected - Day 4, Hour 5: Humidity Spike at 98.00
-Anomaly Detected - Day 4, Hour 6: Humidity Spike at 97.00
-Anomaly Detected - Day 4, Hour 7: Humidity Spike at 96.00
-Anomaly Detected - Day 4, Hour 8: Humidity Spike at 97.00
-Anomaly Detected - Day 4, Hour 9: Humidity Spike at 98.00
-Anomaly Detected - Day 4, Hour 10: Humidity Spike at 95.00
-Anomaly Detected - Day 4, Hour 11: Humidity Spike at 92.00
-Anomaly Detected - Day 4, Hour 12: Humidity Spike at 91.00
-Anomaly Detected - Day 4, Hour 16: Humidity Spike at 92.00
-Anomaly Detected - Day 4, Hour 17: Humidity Spike at 93.00
-Anomaly Detected - Day 4, Hour 18: Humidity Spike at 93.00
-Anomaly Detected - Day 4, Hour 19: Humidity Spike at 92.00
-Anomaly Detected - Day 4, Hour 20: Humidity Spike at 91.00
-Anomaly Detected - Day 4, Hour 21: Humidity Spike at 91.00
-Anomaly Detected - Day 4, Hour 23: Humidity Spike at 91.00
-Anomaly Detected - Day 4, Hour 24: Humidity Spike at 91.00
-Anomaly Detected - Day 7, Hour 1: Humidity Spike at 92.00
-Anomaly Detected - Day 7, Hour 2: Humidity Spike at 94.00
-Anomaly Detected - Day 7, Hour 3: Humidity Spike at 93.00
-Anomaly Detected - Day 7, Hour 4: Humidity Spike at 93.00
-Anomaly Detected - Day 7, Hour 5: Humidity Spike at 93.00
-Anomaly Detected - Day 7, Hour 6: Humidity Spike at 94.00
-Anomaly Detected - Day 7, Hour 7: Humidity Spike at 94.00
-Anomaly Detected - Day 7, Hour 8: Humidity Spike at 94.00
-Anomaly Detected - Day 7, Hour 9: Humidity Spike at 94.00
-Anomaly Detected - Day 7, Hour 10: Humidity Spike at 94.00
-Anomaly Detected - Day 7, Hour 11: Humidity Spike at 94.00
-Anomaly Detected - Day 7, Hour 12: Humidity Spike at 94.00
-Anomaly Detected - Day 7, Hour 13: Humidity Spike at 93.00
-Anomaly Detected - Day 7, Hour 23: Humidity Spike at 92.00
-Anomaly Detected - Day 7, Hour 24: Humidity Spike at 95.00
-Anomaly Detected - Day 8, Hour 1: Humidity Spike at 96.00
-Anomaly Detected - Day 8, Hour 2: Humidity Spike at 95.00
-Anomaly Detected - Day 8, Hour 3: Humidity Spike at 92.00
-Anomaly Detected - Day 8, Hour 10: Humidity Spike at 92.00
-Anomaly Detected - Day 8, Hour 11: Humidity Spike at 93.00
-Anomaly Detected - Day 8, Hour 12: Humidity Spike at 93.00
-Anomaly Detected - Day 8, Hour 13: Humidity Spike at 92.00
-Anomaly Detected - Day 9, Hour 2: Humidity Spike at 91.00
-Anomaly Detected - Day 9, Hour 3: Humidity Spike at 92.00
-Anomaly Detected - Day 9, Hour 4: Humidity Spike at 93.00
-Anomaly Detected - Day 9, Hour 5: Humidity Spike at 93.00
-Anomaly Detected - Day 9, Hour 6: Humidity Spike at 93.00
-Anomaly Detected - Day 9, Hour 7: Humidity Spike at 92.00
-Anomaly Detected - Day 9, Hour 8: Humidity Spike at 91.00
-Anomaly Detected - Day 9, Hour 12: Humidity Spike at 91.00
-Anomaly Detected - Day 9, Hour 13: Humidity Spike at 91.00
-Anomaly Detected - Day 9, Hour 18: Humidity Spike at 91.00
-Anomaly Detected - Day 9, Hour 19: Humidity Spike at 92.00
-Anomaly Detected - Day 9, Hour 20: Humidity Spike at 94.00
-Anomaly Detected - Day 9, Hour 21: Humidity Spike at 96.00
-Anomaly Detected - Day 9, Hour 22: Humidity Spike at 98.00
-Anomaly Detected - Day 9, Hour 23: Humidity Spike at 99.00
-Anomaly Detected - Day 9, Hour 24: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 1: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 2: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 3: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 4: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 5: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 6: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 7: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 8: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 9: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 10: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 11: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 12: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 13: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 14: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 15: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 16: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 17: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 18: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 19: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 20: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 21: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 22: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 23: Humidity Spike at 99.00
-Anomaly Detected - Day 10, Hour 24: Humidity Spike at 99.00
-Anomaly Detected - Day 11, Hour 1: Humidity Spike at 99.00
-Anomaly Detected - Day 11, Hour 2: Humidity Spike at 99.00
-Anomaly Detected - Day 11, Hour 3: Humidity Spike at 100.00
-Anomaly Detected - Day 11, Hour 4: Humidity Spike at 100.00
-Anomaly Detected - Day 11, Hour 5: Humidity Spike at 100.00
-Anomaly Detected - Day 11, Hour 6: Humidity Spike at 100.00
-Anomaly Detected - Day 11, Hour 7: Humidity Spike at 100.00
-Anomaly Detected - Day 11, Hour 8: Humidity Spike at 100.00
-Anomaly Detected - Day 11, Hour 9: Humidity Spike at 100.00
-Anomaly Detected - Day 11, Hour 10: Humidity Spike at 100.00
-Anomaly Detected - Day 11, Hour 11: Humidity Spike at 100.00
-Anomaly Detected - Day 11, Hour 12: Humidity Spike at 100.00
-Anomaly Detected - Day 11, Hour 13: Humidity Spike at 100.00
-Anomaly Detected - Day 11, Hour 14: Humidity Spike at 100.00
-Anomaly Detected - Day 11, Hour 15: Humidity Spike at 100.00
-Anomaly Detected - Day 11, Hour 16: Humidity Spike at 100.00
-Anomaly Detected - Day 11, Hour 17: Humidity Spike at 100.00
-Anomaly Detected - Day 11, Hour 18: Humidity Spike at 99.00
-Anomaly Detected - Day 11, Hour 19: Humidity Spike at 98.00
-Anomaly Detected - Day 11, Hour 20: Humidity Spike at 96.00
-Anomaly Detected - Day 11, Hour 21: Humidity Spike at 94.00
-Anomaly Detected - Day 11, Hour 22: Humidity Spike at 93.00
-Anomaly Detected - Day 11, Hour 23: Humidity Spike at 93.00
-Anomaly Detected - Day 11, Hour 24: Humidity Spike at 94.00
-Anomaly Detected - Day 12, Hour 1: Humidity Spike at 95.00
-Anomaly Detected - Day 12, Hour 2: Humidity Spike at 96.00
-Anomaly Detected - Day 12, Hour 3: Humidity Spike at 96.00
-Anomaly Detected - Day 12, Hour 4: Humidity Spike at 97.00
-Anomaly Detected - Day 12, Hour 5: Humidity Spike at 98.00
-Anomaly Detected - Day 12, Hour 6: Humidity Spike at 98.00
-Anomaly Detected - Day 12, Hour 7: Humidity Spike at 98.00
-Anomaly Detected - Day 12, Hour 8: Humidity Spike at 97.00
-Anomaly Detected - Day 12, Hour 9: Humidity Spike at 95.00
-Anomaly Detected - Day 12, Hour 10: Humidity Spike at 93.00
 Wind Speed Anomlies:
+Cloud Coverage Anomlies:
+Anomaly Detected - Day 1, Hour 1: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 1, Hour 2: Cloud Coverage Spike at 91.00
+Anomaly Detected - Day 1, Hour 3: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 1, Hour 6: Cloud Coverage Spike at 91.00
+Anomaly Detected - Day 1, Hour 7: Cloud Coverage Spike at 98.00
+Anomaly Detected - Day 1, Hour 9: Cloud Coverage Spike at 91.00
+Anomaly Detected - Day 2, Hour 8: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 2, Hour 10: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 2, Hour 11: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 2, Hour 12: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 2, Hour 13: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 2, Hour 14: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 2, Hour 15: Cloud Coverage Spike at 99.00
+Anomaly Detected - Day 2, Hour 16: Cloud Coverage Spike at 95.00
+Anomaly Detected - Day 2, Hour 17: Cloud Coverage Spike at 98.00
+Anomaly Detected - Day 2, Hour 18: Cloud Coverage Spike at 98.00
+Anomaly Detected - Day 2, Hour 19: Cloud Coverage Spike at 94.00
+Anomaly Detected - Day 2, Hour 20: Cloud Coverage Spike at 98.00
+Anomaly Detected - Day 2, Hour 24: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 3, Hour 1: Cloud Coverage Spike at 99.00
+Anomaly Detected - Day 3, Hour 3: Cloud Coverage Spike at 99.00
+Anomaly Detected - Day 3, Hour 4: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 3, Hour 5: Cloud Coverage Spike at 93.00
+Anomaly Detected - Day 3, Hour 7: Cloud Coverage Spike at 92.00
+Anomaly Detected - Day 3, Hour 9: Cloud Coverage Spike at 98.00
+Anomaly Detected - Day 3, Hour 10: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 3, Hour 11: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 3, Hour 12: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 3, Hour 13: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 3, Hour 14: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 3, Hour 15: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 3, Hour 16: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 3, Hour 17: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 3, Hour 18: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 3, Hour 19: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 3, Hour 20: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 3, Hour 21: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 3, Hour 22: Cloud Coverage Spike at 92.00
+Anomaly Detected - Day 4, Hour 4: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 4, Hour 6: Cloud Coverage Spike at 94.00
+Anomaly Detected - Day 4, Hour 7: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 4, Hour 8: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 4, Hour 9: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 4, Hour 10: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 4, Hour 11: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 4, Hour 12: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 4, Hour 13: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 4, Hour 14: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 4, Hour 15: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 4, Hour 16: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 4, Hour 17: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 4, Hour 18: Cloud Coverage Spike at 99.00
+Anomaly Detected - Day 4, Hour 19: Cloud Coverage Spike at 99.00
+Anomaly Detected - Day 4, Hour 20: Cloud Coverage Spike at 99.00
+Anomaly Detected - Day 4, Hour 21: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 4, Hour 22: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 4, Hour 23: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 4, Hour 24: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 5, Hour 1: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 5, Hour 2: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 5, Hour 3: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 5, Hour 4: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 5, Hour 5: Cloud Coverage Spike at 99.00
+Anomaly Detected - Day 5, Hour 6: Cloud Coverage Spike at 99.00
+Anomaly Detected - Day 5, Hour 7: Cloud Coverage Spike at 98.00
+Anomaly Detected - Day 5, Hour 8: Cloud Coverage Spike at 99.00
+Anomaly Detected - Day 5, Hour 9: Cloud Coverage Spike at 99.00
+Anomaly Detected - Day 5, Hour 10: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 5, Hour 11: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 5, Hour 12: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 5, Hour 13: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 5, Hour 14: Cloud Coverage Spike at 99.00
+Anomaly Detected - Day 5, Hour 15: Cloud Coverage Spike at 98.00
+Anomaly Detected - Day 5, Hour 16: Cloud Coverage Spike at 97.00
+Anomaly Detected - Day 5, Hour 17: Cloud Coverage Spike at 97.00
+Anomaly Detected - Day 5, Hour 18: Cloud Coverage Spike at 96.00
+Anomaly Detected - Day 5, Hour 19: Cloud Coverage Spike at 96.00
+Anomaly Detected - Day 5, Hour 20: Cloud Coverage Spike at 96.00
+Anomaly Detected - Day 5, Hour 21: Cloud Coverage Spike at 97.00
+Anomaly Detected - Day 5, Hour 22: Cloud Coverage Spike at 97.00
+Anomaly Detected - Day 5, Hour 23: Cloud Coverage Spike at 97.00
+Anomaly Detected - Day 5, Hour 24: Cloud Coverage Spike at 98.00
+Anomaly Detected - Day 6, Hour 1: Cloud Coverage Spike at 98.00
+Anomaly Detected - Day 6, Hour 2: Cloud Coverage Spike at 99.00
+Anomaly Detected - Day 6, Hour 3: Cloud Coverage Spike at 99.00
+Anomaly Detected - Day 6, Hour 4: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 6, Hour 5: Cloud Coverage Spike at 100.00
+Anomaly Detected - Day 6, Hour 6: Cloud Coverage Spike at 99.00
+Anomaly Detected - Day 6, Hour 7: Cloud Coverage Spike at 99.00
+Anomaly Detected - Day 6, Hour 13: Cloud Coverage Spike at 99.00

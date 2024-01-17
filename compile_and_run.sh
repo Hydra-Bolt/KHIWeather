@@ -1,5 +1,3 @@
-source .env
-#!/bin/bash
 
 # Load environment variables from .env file
 if [ -f .env ]; then
@@ -45,11 +43,6 @@ if ! is_valid_positive_integer "$CITY" 0 9; then
   exit 1
 fi
 
-if ! is_valid_positive_integer "$WEATHER_CAST" 0 3; then
-  echo "Error: WEATHER_CAST must be a positive integer between 1 and 2."
-  exit 1
-fi
-
 if ! is_valid_positive_integer "$NUM_OF_DAYS" 0 17; then
   echo "Error: NUM_OF_DAYS must be a positive integer between 1 and 16."
   exit 1
@@ -70,4 +63,4 @@ if ! is_valid_parameter "$PARAM_3"; then
   exit 1
 fi
 gcc main.c apiparams.c analysis.c plotting.c emailanomalies.c processdata.c weathercast.c -o main -lcurl -lcjson -lplplot -lncurses -lhpdf -Wall 
-./main $CITY $WEATHER_CAST $NUM_OF_DAYS $PARAM_1 $PARAM_2 $PARAM_3 $EMAIL
+./main $CITY 2 $NUM_OF_DAYS $PARAM_1 $PARAM_2 $PARAM_3 $EMAIL

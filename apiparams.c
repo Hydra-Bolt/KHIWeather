@@ -39,7 +39,7 @@ void input_api_params(struct APIParams *params, char *argv[])
             length++;
             break;
         case 2:
-            // Similar changes for other cases
+            
 
             printf("Humidity will be analyzed\n");
             strncpy(params->paramArray[length], "relative_humidity_2m", 60);
@@ -47,7 +47,7 @@ void input_api_params(struct APIParams *params, char *argv[])
 
             break;
         case 3:
-            // Similar changes for other cases
+            
 
             printf("Wind Speed will be analyzed\n");
             strncpy(params->paramArray[length], "wind_speed_10m", 60);
@@ -55,7 +55,7 @@ void input_api_params(struct APIParams *params, char *argv[])
 
             break;
         case 4:
-            // Similar changes for other cases
+            
 
             printf("Precipitation Probability will be analyzed\n");
             strncpy(params->paramArray[length], "precipitation_probability", 60);
@@ -63,7 +63,7 @@ void input_api_params(struct APIParams *params, char *argv[])
 
             break;
         case 5:
-            // Similar changes for other cases
+            
 
             printf("Cloud Cover will be analyzed\n");
             strncpy(params->paramArray[length], "cloud_cover", 60);

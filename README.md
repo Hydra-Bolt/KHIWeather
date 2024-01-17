@@ -6,7 +6,7 @@ A small scale weather analysis and Realtime alert system.
 - run `requirments.sh`, let it install all the dependencies.
 - run `compile_and_run.sh` and the program will run
 
-# Custom Report generation
+# Custom Report Generation
 
 This document provides information on how to use the environment variables specified in the provided `.env` file for interacting with the Weather API  such that to generate customized reports.
 

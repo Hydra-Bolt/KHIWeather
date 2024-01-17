@@ -1,51 +1,24 @@
 Temperature Analysis:
-Day 1: Average Temperature: -2.25, Peak Temperature: -0.60, Lowest Temperature: -5.40
-Day 2: Average Temperature: -7.90, Peak Temperature: -0.60, Lowest Temperature: -11.30
-Day 3: Average Temperature: -3.77, Peak Temperature: -0.00, Lowest Temperature: -11.30
-Day 4: Average Temperature: -1.93, Peak Temperature: -0.00, Lowest Temperature: -11.30
-Day 5: Average Temperature: -6.07, Peak Temperature: -0.00, Lowest Temperature: -11.30
-Day 6: Average Temperature: -5.45, Peak Temperature: -0.00, Lowest Temperature: -11.30
-Day 7: Average Temperature: -3.59, Peak Temperature: 1.00, Lowest Temperature: -11.30
-Day 8: Average Temperature: 0.16, Peak Temperature: 4.60, Lowest Temperature: -11.30
-Day 9: Average Temperature: 2.66, Peak Temperature: 4.60, Lowest Temperature: -11.30
-Day 10: Average Temperature: 4.32, Peak Temperature: 5.60, Lowest Temperature: -11.30
-Day 11: Average Temperature: 9.95, Peak Temperature: 16.50, Lowest Temperature: -11.30
-Day 12: Average Temperature: 12.92, Peak Temperature: 16.50, Lowest Temperature: -11.30
-Day 13: Average Temperature: 4.64, Peak Temperature: 16.50, Lowest Temperature: -11.30
-Day 14: Average Temperature: 4.38, Peak Temperature: 16.50, Lowest Temperature: -11.30
-Day 15: Average Temperature: 3.08, Peak Temperature: 16.50, Lowest Temperature: -11.30
-Day 16: Average Temperature: 5.72, Peak Temperature: 16.50, Lowest Temperature: -11.30
-Humidity Analysis:
-Day 1: Average Humidity: 88.92, Peak Humidity: 99.00, Lowest Humidity: 64.00
-Day 2: Average Humidity: 59.08, Peak Humidity: 99.00, Lowest Humidity: 39.00
-Day 3: Average Humidity: 85.29, Peak Humidity: 99.00, Lowest Humidity: 39.00
-Day 4: Average Humidity: 93.46, Peak Humidity: 99.00, Lowest Humidity: 39.00
-Day 5: Average Humidity: 79.54, Peak Humidity: 99.00, Lowest Humidity: 39.00
-Day 6: Average Humidity: 76.67, Peak Humidity: 99.00, Lowest Humidity: 39.00
-Day 7: Average Humidity: 88.83, Peak Humidity: 99.00, Lowest Humidity: 39.00
-Day 8: Average Humidity: 85.50, Peak Humidity: 99.00, Lowest Humidity: 39.00
-Day 9: Average Humidity: 92.21, Peak Humidity: 99.00, Lowest Humidity: 39.00
-Day 10: Average Humidity: 99.00, Peak Humidity: 99.00, Lowest Humidity: 39.00
-Day 11: Average Humidity: 98.54, Peak Humidity: 100.00, Lowest Humidity: 39.00
-Day 12: Average Humidity: 82.54, Peak Humidity: 100.00, Lowest Humidity: 39.00
-Day 13: Average Humidity: 55.92, Peak Humidity: 100.00, Lowest Humidity: 35.00
-Day 14: Average Humidity: 57.67, Peak Humidity: 100.00, Lowest Humidity: 35.00
-Day 15: Average Humidity: 51.67, Peak Humidity: 100.00, Lowest Humidity: 35.00
-Day 16: Average Humidity: 57.29, Peak Humidity: 100.00, Lowest Humidity: 35.00
+Day 1: Average Temperature: 5.16, Peak Temperature: 9.00, Lowest Temperature: 0.60
+Day 2: Average Temperature: 5.60, Peak Temperature: 10.60, Lowest Temperature: 0.10
+Day 3: Average Temperature: 9.29, Peak Temperature: 12.90, Lowest Temperature: 0.10
+Day 4: Average Temperature: 9.49, Peak Temperature: 12.90, Lowest Temperature: 0.10
+Day 5: Average Temperature: 5.50, Peak Temperature: 12.90, Lowest Temperature: 0.10
+Day 6: Average Temperature: -0.97, Peak Temperature: 12.90, Lowest Temperature: -4.20
+Day 7: Average Temperature: -3.15, Peak Temperature: 12.90, Lowest Temperature: -5.50
 Wind Speed Analysis:
-Day 1: Average Wind Speed: 10.51, Peak Wind Speed: 24.50, Lowest Wind Speed: 2.60
-Day 2: Average Wind Speed: 9.47, Peak Wind Speed: 24.50, Lowest Wind Speed: 1.90
-Day 3: Average Wind Speed: 4.61, Peak Wind Speed: 24.50, Lowest Wind Speed: 1.40
-Day 4: Average Wind Speed: 6.11, Peak Wind Speed: 24.50, Lowest Wind Speed: 0.40
-Day 5: Average Wind Speed: 17.37, Peak Wind Speed: 24.50, Lowest Wind Speed: 0.40
-Day 6: Average Wind Speed: 16.70, Peak Wind Speed: 24.50, Lowest Wind Speed: 0.40
-Day 7: Average Wind Speed: 3.62, Peak Wind Speed: 24.50, Lowest Wind Speed: 0.40
-Day 8: Average Wind Speed: 4.48, Peak Wind Speed: 24.50, Lowest Wind Speed: 0.40
-Day 9: Average Wind Speed: 4.48, Peak Wind Speed: 24.50, Lowest Wind Speed: 0.00
-Day 10: Average Wind Speed: 5.52, Peak Wind Speed: 24.50, Lowest Wind Speed: 0.00
-Day 11: Average Wind Speed: 6.38, Peak Wind Speed: 24.50, Lowest Wind Speed: 0.00
-Day 12: Average Wind Speed: 13.10, Peak Wind Speed: 24.50, Lowest Wind Speed: 0.00
-Day 13: Average Wind Speed: 11.64, Peak Wind Speed: 24.50, Lowest Wind Speed: 0.00
-Day 14: Average Wind Speed: 14.53, Peak Wind Speed: 24.50, Lowest Wind Speed: 0.00
-Day 15: Average Wind Speed: 10.81, Peak Wind Speed: 24.50, Lowest Wind Speed: 0.00
-Day 16: Average Wind Speed: 5.42, Peak Wind Speed: 24.50, Lowest Wind Speed: 0.00
+Day 1: Average Wind Speed: 3.10, Peak Wind Speed: 6.10, Lowest Wind Speed: 0.50
+Day 2: Average Wind Speed: 3.25, Peak Wind Speed: 7.60, Lowest Wind Speed: 0.50
+Day 3: Average Wind Speed: 8.00, Peak Wind Speed: 16.00, Lowest Wind Speed: 0.50
+Day 4: Average Wind Speed: 3.20, Peak Wind Speed: 16.00, Lowest Wind Speed: 0.50
+Day 5: Average Wind Speed: 9.43, Peak Wind Speed: 16.00, Lowest Wind Speed: 0.50
+Day 6: Average Wind Speed: 10.35, Peak Wind Speed: 17.50, Lowest Wind Speed: 0.50
+Day 7: Average Wind Speed: 3.25, Peak Wind Speed: 17.50, Lowest Wind Speed: 0.50
+Cloud Coverage Analysis:
+Day 1: Average Cloud Coverage: 60.25, Peak Cloud Coverage: 100.00, Lowest Cloud Coverage: 0.00
+Day 2: Average Cloud Coverage: 87.83, Peak Cloud Coverage: 100.00, Lowest Cloud Coverage: 0.00
+Day 3: Average Cloud Coverage: 95.12, Peak Cloud Coverage: 100.00, Lowest Cloud Coverage: 0.00
+Day 4: Average Cloud Coverage: 95.75, Peak Cloud Coverage: 100.00, Lowest Cloud Coverage: 0.00
+Day 5: Average Cloud Coverage: 98.42, Peak Cloud Coverage: 100.00, Lowest Cloud Coverage: 0.00
+Day 6: Average Cloud Coverage: 45.46, Peak Cloud Coverage: 100.00, Lowest Cloud Coverage: 0.00
+Day 7: Average Cloud Coverage: 15.38, Peak Cloud Coverage: 100.00, Lowest Cloud Coverage: 0.00
